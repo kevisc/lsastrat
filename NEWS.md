@@ -10,5 +10,9 @@
   social or achievement-based (PV-pooled) grouping, sharing the same
   replicate-weight variance engine. D and H cross-validated against the
   `segregation` package.
+* `ieop()`: Ferreira-Gignoux inequality of educational opportunity — the share
+  of achievement variance explained by a vector of pre-determined circumstances
+  (relative IOp = R-squared), plus absolute IOp and total variance, PV-pooled
+  and replicate-weighted. Anchored to base-R weighted regression R-squared.
 * `pool_pv()` / `rep_factor()`: the shared Rubin's-rules + replicate-weight
   variance engine, exposed for reuse.

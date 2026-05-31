@@ -28,13 +28,14 @@ Early scaffold. Implemented:
   **Hutchens** square-root, **Theil's H** and mutual information **M**, for
   social *or* achievement-based (PV-pooled) grouping, with replicate-weight
   SEs. *D and H cross-validated against the `segregation` package.*
+- [x] `ieop()` — Ferreira–Gignoux inequality of educational opportunity: share
+  of achievement variance explained by a circumstance vector (relative IOp =
+  R²), plus absolute IOp and total variance, PV-pooled and replicate-weighted.
 - [x] `pool_pv()` / `rep_factor()` — the shared Rubin's-rules + replicate-weight
   variance engine.
 
 Planned:
 
-- [ ] `ieop()` — Ferreira–Gignoux inequality of educational opportunity
-  (achievement variance explained by circumstances).
 - [ ] Bootstrap variance option for segregation indices.
 - [ ] PV/weight-aware specification-curve / multiverse engine.
 
