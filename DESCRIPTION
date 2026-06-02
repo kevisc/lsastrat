@@ -1,6 +1,6 @@
 Package: lsastrat
 Title: Stratification and Inequality Metrics for Large-Scale Assessment Data
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     person("Kevin", "Schoenholzer", , "kevinschonholzer@gmail.com",
            role = c("aut", "cre", "cph"),
@@ -13,9 +13,14 @@ Description: Computes educational stratification and inequality quantities
     socio-economic achievement gradient (slope, strength and curvature),
     school-level segregation indices with a clustered bootstrap and
     finite-sample bias correction, and the Ferreira-Gignoux decomposition of
-    inequality of educational opportunity. Complements general LSA packages
-    (such as 'EdSurvey', 'intsvy' and 'BIFIEsurvey') by packaging
-    stratification measures that those tools leave to be assembled by hand.
+    inequality of educational opportunity. Further tools decompose these
+    quantities (between/within-school variance, a Shapley decomposition of
+    inequality of opportunity, and Oaxaca-Blinder achievement-gap
+    decomposition), compare them across groups, and run plausible-value and
+    replicate-weight aware specification-curve (multiverse) analyses.
+    Complements general LSA packages (such as 'EdSurvey', 'intsvy' and
+    'BIFIEsurvey') by packaging stratification measures that those tools leave
+    to be assembled by hand.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-GB
@@ -30,6 +35,7 @@ Imports:
     utils
 Suggests:
     covr,
+    ggplot2,
     intsvy,
     knitr,
     rmarkdown,

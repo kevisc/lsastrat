@@ -37,6 +37,13 @@ and **replicate-weight variance** (BRR/Fay, JK2, JK1):
 * `ieop()` — the Ferreira–Gignoux decomposition of inequality of educational
   opportunity.
 
+It also **decomposes** these quantities (between/within-school variance,
+Shapley decomposition of inequality of opportunity, Oaxaca–Blinder gap
+decomposition), **compares** them across countries/subgroups (`lsa_by()`,
+`equity_scatter()`), and runs PV/weight-aware **specification-curve
+(multiverse)** analyses (`lsa_multiverse()`), with base and `ggplot2`
+(`autoplot()`) graphics throughout.
+
 General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`, OECD's
 `Rrepest`) handle plausible values and replicate weights but expose only
 generic estimators (means, regression, correlation); none emits these
@@ -108,8 +115,8 @@ Please report bugs and ask questions on the
 
 ## Roadmap
 
-A plausible-value/weight-aware specification-curve (multiverse) engine and a
-reusable `lsa_design()` object are planned for a future release.
+Cross-fitted (sample-split) inequality of opportunity and stratified
+multiverse designs are planned for future releases.
 
 ## Funding
 

@@ -82,6 +82,16 @@ bias) [@elbers2023]. The bias correction is applied only to the segregation
 indices, which are subject to this small-cell bias; the gradient and the
 opportunity decomposition are not.
 
+Around these core estimators the package adds the operations comparative
+stratification research repeatedly needs: decompositions of the quantities
+(between- and within-school variance, a Shapley decomposition of the inequality
+of opportunity into individual circumstances, and Oaxaca-Blinder achievement-gap
+decomposition), a wrapper that runs any estimator across countries or subgroups
+into one comparable table, and a plausible-value/replicate-weight aware
+specification-curve ("multiverse") engine for assessing how robust a finding is
+to defensible analytic choices. All results share one class with `coef`,
+`confint`, base-graphics and \pkg{ggplot2} `autoplot` methods.
+
 The estimators are cross-validated against established implementations: the
 socio-economic gradient reproduces `intsvy::pisa.reg.pv`, the dissimilarity and
 Theil's $H$ indices match the `segregation` package, and the relative

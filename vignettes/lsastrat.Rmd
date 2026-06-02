@@ -118,6 +118,71 @@ version; prefer it, and treat `iop` as the ceiling. `explained_var` is the
 absolute inequality of opportunity (variance of predicted scores) and
 `total_var` the total achievement variance.
 
+## Comparing groups
+
+`lsa_by()` runs any estimator across the levels of a grouping variable and
+stacks the results into one comparable table -- the workhorse for cross-country
+work. `equity_scatter()` draws the OECD quality-vs-equity scatter.
+
+```{r by}
+by_imm <- lsa_by(pisa_mini, by = "IMMIG", estimator = social_gradient,
+                 achievement = math, escs = "ESCS", weight = "W_FSTUWT",
+                 repweights = reps)
+by_imm
+```
+
+## Decomposing inequality
+
+Three decompositions break a quantity into interpretable parts. The
+between-school variance share (a strongly stratified system has a high value):
+
+```{r vardecomp}
+variance_decomposition(pisa_mini, math, unit = "school_id",
+                       weight = "W_FSTUWT", repweights = reps)
+```
+
+The Shapley decomposition attributes the inequality of opportunity to each
+circumstance (the contributions sum to the total relative IOp):
+
+```{r ieopdecomp}
+ieop_decompose(pisa_mini, math,
+               circumstances = c("IMMIG", "parental_edu", "books"),
+               weight = "W_FSTUWT", repweights = reps)
+```
+
+The Oaxaca-Blinder decomposition splits an achievement gap into an explained
+(composition) and an unexplained (structure) part:
+
+```{r oaxaca}
+d2 <- pisa_mini[pisa_mini$IMMIG %in% c("native", "first_gen"), ]
+d2$IMMIG <- factor(d2$IMMIG)
+oaxaca_gap(d2, math, group = "IMMIG",
+           predictors = c("ESCS", "books", "parental_edu"),
+           weight = "W_FSTUWT", repweights = reps)
+```
+
+## Multiverse analysis
+
+`lsa_multiverse()` runs an estimator across a grid of analytic forking paths so
+you can read off how robust a finding is. Bundle the design once with
+`lsa_design()`:
+
+```{r multiverse}
+des <- lsa_design(weight = "W_FSTUWT", repweights = reps)
+mv <- lsa_multiverse(
+  pisa_mini, estimator = social_gradient,
+  grid = list(
+    achievement = list(math = math, read = paste0("PV", 1:10, "READ")),
+    curvature = list(linear = FALSE, quadratic = TRUE)
+  ),
+  fixed = list(escs = "ESCS"), design = des, term = "slope")
+mv
+```
+
+Every result has a `plot()` method, and an `autoplot()` method when ggplot2 is
+installed (e.g. `autoplot(by_imm, term = "slope")` for a forest plot, or
+`autoplot(mv)` for the specification curve).
+
 ## Where it fits
 
 `lsastrat` complements rather than replaces general LSA packages such as

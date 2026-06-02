@@ -10,17 +10,34 @@ reference:
   - social_gradient
   - segregation_index
   - ieop
+  - variance_decomposition
+- title: Decompositions
+  desc: Attributing inequality to its sources.
+  contents:
+  - ieop_decompose
+  - oaxaca_gap
+- title: Comparison and multiverse
+  desc: Comparative and robustness analysis.
+  contents:
+  - lsa_by
+  - equity_scatter
+  - lsa_multiverse
+  - lsa_design
 - title: Variance engine
   desc: The shared plausible-value pooling and replicate-weight machinery.
   contents:
   - pool_pv
   - rep_factor
 - title: Methods
-  desc: Accessors for fitted estimate objects.
+  desc: Accessors and plots for fitted objects.
   contents:
   - lsastrat_estimate
+  - autoplot.lsastrat
   - plot.social_gradient
   - plot.segregation
+  - plot.lsastrat_by
+  - plot.equity_scatter
+  - plot.lsa_multiverse
 - title: Data
   contents:
   - pisa_mini
