@@ -28,7 +28,3 @@ Useful links:
 
 **Maintainer**: Kevin Schoenholzer <kevinschonholzer@gmail.com>
 ([ORCID](https://orcid.org/0000-0001-9892-5869)) \[copyright holder\]
-
-Other contributors:
-
-- Swiss National Science Foundation (Grant 205177) \[funder\]

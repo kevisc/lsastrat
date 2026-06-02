@@ -139,6 +139,12 @@ Conduct](https://kevisc.github.io/lsastrat/CODE_OF_CONDUCT.md).
 A plausible-value/weight-aware specification-curve (multiverse) engine
 and a reusable `lsa_design()` object are planned for a future release.
 
+## Funding
+
+`lsastrat` was developed by Kevin Schoenholzer. This research was
+supported by Università della Svizzera italiana (USI Lugano) and by the
+Swiss National Science Foundation under grant 205177.
+
 ## License
 
 MIT © Kevin Schoenholzer

@@ -5,9 +5,6 @@
 - **Kevin Schoenholzer**. Author, maintainer, copyright holder.
   [](https://orcid.org/0000-0001-9892-5869)
 
-- **Swiss National Science Foundation**. Funder.  
-  Grant 205177
-
 ## Citation
 
 Source:
