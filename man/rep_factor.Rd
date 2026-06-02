@@ -2,7 +2,7 @@
 % Please edit documentation in R/pooling.R
 \name{rep_factor}
 \alias{rep_factor}
-\title{Replicate-weight factors}
+\title{Replicate-weight variance factors}
 \usage{
 rep_factor(method = c("BRR", "JK2", "JK1"), n_rep, fay = 0.5)
 }
@@ -12,23 +12,30 @@ default), \code{"JK2"} (paired jackknife, used by TIMSS/PIRLS), or \code{"JK1"}.
 
 \item{n_rep}{Number of replicate weights.}
 
-\item{fay}{Fay's adjustment factor for BRR (PISA uses 0.5). Ignored for
-jackknife methods.}
+\item{fay}{Fay's adjustment factor for BRR (PISA uses 0.5). Must lie in
+\eqn{[0, 1)}. Ignored for jackknife methods.}
 }
 \value{
 A single numeric multiplier.
 }
 \description{
-Returns the multiplier \code{c} in the replicate-variance formula
+Returns the multiplier \eqn{c} in the replicate-variance formula
 \eqn{V = c \sum_r (\hat\theta_r - \hat\theta_0)^2}, for the common
-LSA replication designs.
+large-scale-assessment replication designs.
 }
 \details{
 \itemize{
 \item BRR/Fay: \eqn{c = 1 / (R (1 - k)^2)}, where \code{k} is \code{fay}. With \code{fay = 0}
-this is ordinary BRR (\code{1/R}); with \code{fay = 0.5} (PISA) it is \code{4/R}.
-\item JK2: \eqn{c = 1}.
-\item JK1: \eqn{c = (R - 1) / R}.
+this is ordinary BRR (\eqn{1/R}); with \code{fay = 0.5} (PISA) it is \eqn{4/R}.
+\item JK2 (IEA paired-zone construction): \eqn{c = 1}.
+\item JK1 (single-stratum / equal-zone): \eqn{c = (R - 1) / R}.
 }
 }
-\keyword{internal}
+\examples{
+rep_factor("BRR", n_rep = 80, fay = 0.5) # PISA: 1/20
+rep_factor("JK2", n_rep = 75)            # TIMSS/PIRLS: 1
+}
+\references{
+OECD (2009). \emph{PISA Data Analysis Manual: SPSS and SAS, Second Edition}.
+OECD Publishing. (Replicate-weight variance estimation.)
+}

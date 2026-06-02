@@ -12,7 +12,8 @@ social_gradient(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
-  curvature = TRUE
+  curvature = TRUE,
+  level = 0.95
 )
 }
 \arguments{
@@ -34,15 +35,17 @@ model-based (independence) standard error is returned with a warning.}
 \item{rep_method}{Replication design: \code{"BRR"} (PISA default), \code{"JK2"}
 (TIMSS/PIRLS) or \code{"JK1"}. Used only when \code{repweights} is supplied.}
 
-\item{fay}{Fay adjustment for BRR (PISA uses 0.5).}
+\item{fay}{Fay adjustment for BRR (PISA uses 0.5); see \code{\link[=rep_factor]{rep_factor()}}.}
 
 \item{curvature}{Logical; if \code{TRUE} (default) also fit a quadratic model and
 report the curvature (ESCS-squared) coefficient.}
+
+\item{level}{Confidence level for the stored interval (default \code{0.95}).}
 }
 \value{
-An object of class \code{"social_gradient"}: a list with a \code{coefficients}
-data frame (rows \code{slope}, \code{strength}, and optionally \code{curvature}; columns
-\code{estimate}, \code{se}, \code{t}, \code{p}) plus metadata.
+An object of class \code{"social_gradient"} / \code{"lsastrat_estimate"} (see
+\link{lsastrat_estimate} for methods): a list with a \code{coefficients} data frame
+(rows \code{slope}, \code{strength}, and optionally \code{curvature}) plus metadata.
 }
 \description{
 Computes the socio-economic gradient of achievement from large-scale
@@ -56,17 +59,18 @@ Optionally the quadratic \strong{curvature} term is also reported.
 Achievement is supplied as a set of plausible values (PVs); estimates are
 pooled across PVs with Rubin's rules, and the sampling variance is obtained
 from replicate weights when supplied (see \code{\link[=pool_pv]{pool_pv()}} and \code{\link[=rep_factor]{rep_factor()}}).
+Inference uses a \eqn{t} reference (see \code{\link[=pool_pv]{pool_pv()}} for the degrees of
+freedom).
 }
 \examples{
-set.seed(1)
-n <- 2000
-escs <- rnorm(n)
-# true gradient: 40 score points per ESCS unit
-pv <- replicate(5, 500 + 40 * escs + rnorm(n, sd = 80))
-colnames(pv) <- paste0("PV", 1:5, "READ")
-dat <- data.frame(escs, pv, W_FSTUWT = runif(n, 0.5, 2))
-social_gradient(dat, achievement = colnames(pv), escs = "escs",
-                weight = "W_FSTUWT")
+data(pisa_mini)
+social_gradient(
+  pisa_mini,
+  achievement = paste0("PV", 1:10, "MATH"),
+  escs = "ESCS",
+  weight = "W_FSTUWT",
+  repweights = paste0("W_FSTURWT", 1:64)
+)
 }
 \references{
 OECD (2023). \emph{PISA 2022 Results (Volume I)}, Annex A3 (socio-economic

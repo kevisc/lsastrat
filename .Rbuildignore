@@ -3,6 +3,16 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.github$
+^data-raw$
+^paper$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.Rcheck$
+^.*\.Rcheck$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+^codecov\.yml$
 ^doc$
 ^Meta$
-^dev$
+^README\.html$

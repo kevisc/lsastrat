@@ -12,7 +12,8 @@ ieop(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
-  statistics = c("iop", "explained_var", "total_var")
+  statistics = c("iop", "iop_adj", "explained_var", "total_var"),
+  level = 0.95
 )
 }
 \arguments{
@@ -21,66 +22,69 @@ ieop(
 \item{achievement}{Character vector of achievement plausible-value columns.}
 
 \item{circumstances}{Character vector of circumstance columns (the vector
-\eqn{C}). Character columns are treated as categorical (entered as
-dummies); numeric columns enter linearly. For the canonical PISA
-application this is the ten variables of Ferreira & Gignoux (2014):
-gender, father's and mother's education, father's occupation, language at
-home, migration status, books at home, and household durables/cultural
-possessions.}
+\eqn{C}). Character/factor columns are treated as categorical; numeric
+columns enter linearly. The canonical PISA application (Ferreira &
+Gignoux, 2014) uses gender, parental education and occupation, books and
+household possessions, language at home and migration status.}
 
 \item{weight}{Name of the final student weight column. If \code{NULL}, equal
 weights are used (with a message).}
 
-\item{repweights}{Optional character vector of replicate-weight columns.
-When supplied, standard errors are design-based; otherwise only the
-point estimate (plus the between-PV component) is returned, with a
-warning.}
+\item{repweights}{Optional character vector of replicate-weight columns.}
 
 \item{rep_method, fay}{Replication design and Fay factor; see \code{\link[=rep_factor]{rep_factor()}}.}
 
-\item{statistics}{Which quantities to return: \code{"iop"} (relative IOp = R^2,
-the headline), \code{"explained_var"} (absolute IOp, Var of predicted scores)
-and \code{"total_var"} (total achievement variance).}
+\item{statistics}{Which quantities to return: \code{"iop"} (relative IOp = raw
+\eqn{R^2}), \code{"iop_adj"} (df-adjusted relative IOp), \code{"explained_var"}
+(absolute IOp) and \code{"total_var"} (total achievement variance).}
+
+\item{level}{Confidence level for the stored interval (default \code{0.95}).}
 }
 \value{
-An object of class \code{"ieop"}: a list with a \code{coefficients} data frame
-(one row per statistic; columns \code{estimate}, \code{se}, \code{t}, \code{p}) plus metadata.
+An object of class \code{"ieop"} / \code{"lsastrat_estimate"} (see
+\link{lsastrat_estimate} for methods).
 }
 \description{
 Computes the Ferreira-Gignoux (2014) measure of inequality of educational
 opportunity (IOp): the share of achievement inequality attributable to
 pre-determined \emph{circumstances} (family background, gender, migration status,
-and similar variables that lie outside the student's control). It is the
-\eqn{R^2} of a regression of achievement on the circumstance vector, using
-the \strong{variance} as the inequality index.
+and similar variables outside the student's control). It is the \eqn{R^2} of
+a regression of achievement on the circumstance vector, using the
+\strong{variance} as the inequality index.
 }
 \details{
 Following Ferreira & Gignoux, the variance is the inequality measure of
 choice because, unlike the Gini coefficient or the mean log deviation, it is
 ordinally invariant under the affine standardisation that assessment scores
-undergo (a score scale of mean 500, SD 100 is an arbitrary normalisation).
-The relative IOp is then
-\deqn{IOp = \frac{\mathrm{Var}(\hat y)}{\mathrm{Var}(y)} = R^2,}
-the ratio of the variance of the circumstance-predicted ("smoothed")
-achievement to total achievement variance. The absolute IOp is
-\eqn{\mathrm{Var}(\hat y)} in squared score points.
+undergo. The relative IOp is
+\deqn{IOp = \mathrm{Var}(\hat y) / \mathrm{Var}(y) = R^2,}
+the ratio of circumstance-predicted ("smoothed") achievement variance to
+total achievement variance. The absolute IOp is \eqn{\mathrm{Var}(\hat y)}
+in squared score points.
+}
+\section{Overfitting and the adjusted measure}{
+
+The raw \eqn{R^2} is an \strong{upper bound}: it is mechanically inflated when the
+circumstance vector expands into many dummy columns (Ferreira & Gignoux,
+2014). \code{ieop()} therefore also reports \code{iop_adj}, a degrees-of-freedom
+adjusted relative IOp,
+\deqn{1 - (1 - R^2)\,\frac{n_\mathrm{eff} - 1}{n_\mathrm{eff} - k},}
+where \eqn{n_\mathrm{eff}} is Kish's weighted effective sample size and
+\eqn{k} the number of estimated parameters, and warns when \eqn{k} is large
+relative to \eqn{n_\mathrm{eff}}. Cross-fitted / sample-split IOp is planned
+for a future release.
 
 Achievement is supplied as plausible values and pooled with Rubin's rules;
-standard errors are design-based when replicate weights are given (see
-\code{\link[=pool_pv]{pool_pv()}} and \code{\link[=rep_factor]{rep_factor()}}).
+standard errors are design-based when replicate weights are given.
 }
+
 \examples{
-set.seed(1)
-n <- 2000
-books <- factor(sample(c("few", "some", "many"), n, replace = TRUE))
-pared <- rnorm(n)                       # parental education (standardised)
-# achievement driven partly by circumstances, partly by other factors
-base <- 500 + 25 * pared + 20 * (books == "many") - 15 * (books == "few")
-pv <- replicate(5, base + rnorm(n, sd = 70))
-colnames(pv) <- paste0("PV", 1:5, "MATH")
-d <- data.frame(books, pared, pv, w = runif(n, 0.5, 2))
-ieop(d, achievement = paste0("PV", 1:5, "MATH"),
-     circumstances = c("books", "pared"), weight = "w")
+data(pisa_mini)
+ieop(pisa_mini,
+     achievement = paste0("PV", 1:10, "MATH"),
+     circumstances = c("IMMIG", "parental_edu", "books"),
+     weight = "W_FSTUWT",
+     repweights = paste0("W_FSTURWT", 1:64))
 }
 \references{
 Ferreira, F. H. G. & Gignoux, J. (2014). The measurement of educational

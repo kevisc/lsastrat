@@ -15,7 +15,13 @@ segregation_index(
   weight = NULL,
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
-  fay = 0.5
+  fay = 0.5,
+  variance = c("replicate", "bootstrap", "none"),
+  n_boot = 200L,
+  debias = TRUE,
+  boot_cluster = NULL,
+  boot_seed = NULL,
+  level = 0.95
 )
 }
 \arguments{
@@ -36,34 +42,49 @@ the \code{"below"} group.}
 \code{"S"} (Gorard's segregation index), \code{"isolation"} (minority isolation),
 \code{"Hutchens"} (square-root index), \code{"H"} (Theil's information / entropy
 index) and \code{"M"} (mutual information). \code{H} and \code{M} support more than two
-groups; \code{D}, \code{S}, \code{isolation} and \code{Hutchens} are computed for the
-\code{minority} group versus the rest.}
+groups; \code{D}, \code{S}, \code{isolation} and \code{Hutchens} compare the \code{minority} group
+to the rest.}
 
 \item{minority}{Which group level is the minority for the binary indices.
-Defaults to the least frequent level.}
+Defaults to the least frequent (weighted) level.}
 
 \item{weight}{Name of the final student weight column. If \code{NULL}, equal
 weights are used (with a message).}
 
-\item{repweights}{Optional character vector of replicate-weight columns.
-When supplied, standard errors are design-based via \code{\link[=rep_factor]{rep_factor()}}; when
-\code{NULL}, only point estimates (and, with plausible values, the
-between-PV/imputation component) are returned.}
+\item{repweights}{Optional character vector of replicate-weight columns
+(used when \code{variance = "replicate"}).}
 
 \item{rep_method, fay}{Replication design and Fay factor; see \code{\link[=rep_factor]{rep_factor()}}.}
+
+\item{variance}{Variance estimator: \code{"replicate"} (default when
+\code{repweights} are supplied), \code{"bootstrap"} (default otherwise), or
+\code{"none"} (point estimates only).}
+
+\item{n_boot}{Number of bootstrap resamples (default 200).}
+
+\item{debias}{Logical; apply bootstrap bias correction under
+\code{variance = "bootstrap"} (default \code{TRUE}).}
+
+\item{boot_cluster}{Name of the column defining the stage-one bootstrap
+clusters (the primary sampling units); defaults to \code{unit}.}
+
+\item{boot_seed}{Optional integer seed for reproducible bootstrap draws (the
+global RNG state is restored on exit).}
+
+\item{level}{Confidence level for the stored interval (default \code{0.95}).}
 }
 \value{
-An object of class \code{"segregation"}: a list with a \code{coefficients}
-data frame (one row per index; columns \code{estimate}, \code{se}, \code{t}, \code{p}) plus
-metadata.
+An object of class \code{"segregation"} / \code{"lsastrat_estimate"} (see
+\link{lsastrat_estimate} for methods): a \code{coefficients} data frame (one row per
+index) plus metadata.
 }
 \description{
 Computes the family of segregation indices used in educational
-stratification research — measuring how unevenly student groups are
-distributed across schools (or any nesting unit) — with survey-weighted
-counts, replicate-weight standard errors, and plausible-value pooling when
-group membership is defined by an achievement threshold (academic
-segregation).
+stratification research -- measuring how unevenly student groups are
+distributed across schools (or any nesting unit) -- with survey-weighted
+counts, plausible-value pooling for achievement-based groups, and a choice
+of variance estimator: replicate weights or a clustered bootstrap with
+finite-sample bias correction.
 }
 \details{
 Two ways to define the group:
@@ -75,20 +96,34 @@ columns) together with \code{cutoff}; students scoring below the cutoff form
 the minority group, and the index is pooled across plausible values.
 }
 }
+\section{Variance and bias}{
+
+The entropy and dissimilarity indices (M, H, D, Gorard's S, Hutchens) are
+positively biased in finite samples, and large-scale assessments -- with
+tens of students sampled per school across many schools -- are the
+worst case. With \code{variance = "bootstrap"} a two-stage clustered bootstrap is
+used: stage one resamples whole clusters (the design level, giving a
+design-correct sampling variance) and stage two resamples students within
+each drawn cluster (the within-school fluctuation that drives the
+finite-sample bias). The bootstrap bias estimate is then subtracted when
+\code{debias = TRUE} (Elbers, 2023). With \code{variance = "replicate"} the supplied
+replicate weights give the sampling variance but no bias correction is
+applied; the point estimates are then the (upward-biased) plug-in values, so
+bootstrap variance is recommended when bias is a concern.
+}
+
 \examples{
-set.seed(1)
-n <- 3000
-school <- sample(1:60, n, replace = TRUE)
-# disadvantaged students clustered into low-numbered schools
-p_dis <- plogis(-0.05 * school + 1.5)
-disadv <- rbinom(n, 1, p_dis)
-d <- data.frame(school, grp = factor(disadv, labels = c("adv", "dis")),
-                w = runif(n, 0.5, 2))
-segregation_index(d, unit = "school", group = "grp", weight = "w")
+data(pisa_mini)
+# social segregation by immigrant background, bootstrap bias-corrected
+segregation_index(pisa_mini, unit = "school_id", group = "IMMIG",
+                  weight = "W_FSTUWT", variance = "bootstrap",
+                  n_boot = 99, boot_seed = 1)
 }
 \references{
 Gorard, S. & Taylor, C. (2002). What is segregation? \emph{Sociology}, 36(4).
-Hutchens, R. (2004). One measure of segregation. \emph{Int. Economic Review},
-45(2). Mora, R. & Ruiz-Castillo, J. (2011); Elbers, B. (2023), R package
-\pkg{segregation}.
+Hutchens, R. (2004). One measure of segregation. \emph{International Economic
+Review}, 45(2). Mora, R. & Ruiz-Castillo, J. (2011). Entropy-based
+segregation indices. \emph{Sociological Methodology}, 41(1). Elbers, B. (2023).
+A method for studying differences in segregation. \emph{Sociological Methods &
+Research} (R package \pkg{segregation}).
 }

@@ -1,0 +1,26 @@
+url: https://kevisc.github.io/lsastrat/
+
+template:
+  bootstrap: 5
+
+reference:
+- title: Estimators
+  desc: First-class stratification and inequality quantities.
+  contents:
+  - social_gradient
+  - segregation_index
+  - ieop
+- title: Variance engine
+  desc: The shared plausible-value pooling and replicate-weight machinery.
+  contents:
+  - pool_pv
+  - rep_factor
+- title: Methods
+  desc: Accessors for fitted estimate objects.
+  contents:
+  - lsastrat_estimate
+  - plot.social_gradient
+  - plot.segregation
+- title: Data
+  contents:
+  - pisa_mini

@@ -1,0 +1,16 @@
+citHeader("To cite lsastrat in publications use:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "{lsastrat}: Stratification and Inequality Metrics for Large-Scale Assessment Data",
+  author   = person("Kevin", "Schoenholzer",
+                    comment = c(ORCID = "0000-0001-9892-5869")),
+  year     = "2026",
+  note     = "R package version 0.1.0",
+  url      = "https://github.com/kevisc/lsastrat",
+  textVersion = paste0(
+    "Schoenholzer, K. (2026). lsastrat: Stratification and Inequality Metrics ",
+    "for Large-Scale Assessment Data. R package version 0.1.0. ",
+    "https://github.com/kevisc/lsastrat"
+  )
+)

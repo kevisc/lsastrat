@@ -1,0 +1,129 @@
+---
+title: "Getting started with lsastrat"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with lsastrat}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(lsastrat)
+data(pisa_mini)
+```
+
+## What lsastrat does
+
+`lsastrat` turns large-scale assessment (LSA) data — PISA, TIMSS, PIRLS — into
+the stratification and inequality quantities that education researchers report,
+and returns them as first-class objects. It handles the two features that make
+LSA data awkward:
+
+* **Plausible values (PVs).** Achievement is reported as several imputed
+  draws, not a single score. Every estimator is computed on each PV and the
+  results are combined with Rubin's (1987) rules, so the measurement
+  uncertainty enters the standard error.
+* **Replicate weights.** Complex sampling means the variance must be estimated
+  from replicate weights (BRR/Fay for PISA; JK2 for TIMSS/PIRLS) or, for the
+  segregation indices, a clustered bootstrap.
+
+Inference uses a *t* reference with Rubin degrees of freedom (not the normal),
+which matters because LSA studies provide only 5 or 10 plausible values.
+
+All examples use `pisa_mini`, a **fully simulated** PISA-like data set bundled
+with the package (it is *not* real PISA data). It has 10 plausible values each
+for mathematics and reading (`PV1MATH`…`PV10MATH`), a final weight
+(`W_FSTUWT`), 64 Fay BRR replicate weights (`W_FSTURWT1`…`W_FSTURWT64`), and
+background variables.
+
+```{r reps}
+reps <- paste0("W_FSTURWT", 1:64)
+math <- paste0("PV", 1:10, "MATH")
+```
+
+## The socio-economic gradient
+
+`social_gradient()` follows the OECD definition: the **slope** is the
+score-point change per one unit of the socio-economic index (ESCS), the
+**strength** is the percentage of achievement variance it explains
+(R² × 100), and **curvature** is an optional quadratic term.
+
+```{r gradient}
+g <- social_gradient(pisa_mini, achievement = math, escs = "ESCS",
+                     weight = "W_FSTUWT", repweights = reps)
+g
+```
+
+The result behaves like a model object:
+
+```{r gradient-methods}
+coef(g)
+confint(g)
+```
+
+```{r gradient-plot, fig.width = 6, fig.height = 4}
+plot(g)
+```
+
+## School segregation
+
+`segregation_index()` reports the family of indices used in stratification
+research. Pass a categorical `group` for **social** segregation:
+
+```{r seg-social}
+segregation_index(pisa_mini, unit = "school_id", group = "IMMIG",
+                  weight = "W_FSTUWT", variance = "bootstrap",
+                  n_boot = 99, boot_seed = 1)
+```
+
+The entropy and dissimilarity indices are upward-biased when schools are small
+— exactly the LSA case. With `variance = "bootstrap"` a two-stage clustered
+bootstrap estimates and removes that bias (`debias = TRUE`) and gives a
+design-correct standard error. With replicate weights you can instead use them
+directly (no bias correction):
+
+```{r seg-rep}
+segregation_index(pisa_mini, unit = "school_id", group = "IMMIG",
+                  weight = "W_FSTUWT", repweights = reps,
+                  indices = c("D", "H", "M"))
+```
+
+For **academic** segregation, define the group by an achievement threshold; the
+index is then pooled across plausible values:
+
+```{r seg-academic}
+segregation_index(pisa_mini, unit = "school_id", achievement = math,
+                  cutoff = 480, indices = c("D", "H"),
+                  variance = "bootstrap", n_boot = 99, boot_seed = 1)
+```
+
+## Inequality of educational opportunity
+
+`ieop()` implements the Ferreira–Gignoux (2014) decomposition: the share of
+achievement variance explained by pre-determined **circumstances**.
+
+```{r ieop}
+ieop(pisa_mini, achievement = math,
+     circumstances = c("IMMIG", "parental_edu", "books"),
+     weight = "W_FSTUWT", repweights = reps)
+```
+
+The raw `iop` is the regression R² and is an **upper bound** — it inflates as
+the circumstance set grows. `iop_adj` is the degrees-of-freedom adjusted
+version; prefer it, and treat `iop` as the ceiling. `explained_var` is the
+absolute inequality of opportunity (variance of predicted scores) and
+`total_var` the total achievement variance.
+
+## Where it fits
+
+`lsastrat` complements rather than replaces general LSA packages such as
+`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA` and OECD's `Rrepest`, which provide
+the generic estimators but leave these stratification quantities to be
+assembled by hand. The estimators are cross-validated against
+`intsvy::pisa.reg.pv()`, the `segregation` package, and a weighted regression
+R².
+```

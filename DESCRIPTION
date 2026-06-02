@@ -1,34 +1,43 @@
 Package: lsastrat
 Title: Stratification and Inequality Metrics for Large-Scale Assessment Data
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R:
-    person("Kevin", "Schoenholzer", , "kevinschonholzer@gmail.com",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-9892-5869"))
+    c(person("Kevin", "Schoenholzer", , "kevinschonholzer@gmail.com",
+             role = c("aut", "cre", "cph"),
+             comment = c(ORCID = "0000-0001-9892-5869")),
+      person("Swiss National Science Foundation", role = "fnd",
+             comment = "Grant 205177"))
 Description: Computes educational stratification and inequality quantities
     from large-scale assessment (LSA) data such as PISA, TIMSS and PIRLS as
-    first-class outputs, with correct plausible-value pooling (Rubin's rules)
-    and survey/replicate-weight variance estimation (BRR/Fay and jackknife).
-    Provides the socio-economic achievement gradient (slope, strength and
-    curvature), school-level segregation indices, and the Ferreira-Gignoux
-    decomposition of inequality of educational opportunity. Complements
-    general LSA packages (such as 'EdSurvey', 'intsvy' and 'BIFIEsurvey') by
-    packaging stratification measures that those tools leave to be assembled
-    by hand.
+    first-class outputs, with plausible-value pooling (Rubin's rules) and
+    survey replicate-weight variance estimation (balanced repeated
+    replication, including Fay's method, and jackknife). Provides the
+    socio-economic achievement gradient (slope, strength and curvature),
+    school-level segregation indices with a clustered bootstrap and
+    finite-sample bias correction, and the Ferreira-Gignoux decomposition of
+    inequality of educational opportunity. Complements general LSA packages
+    (such as 'EdSurvey', 'intsvy' and 'BIFIEsurvey') by packaging
+    stratification measures that those tools leave to be assembled by hand.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-GB
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
-    stats
+    graphics,
+    stats,
+    utils
 Suggests:
-    testthat (>= 3.0.0),
+    covr,
     intsvy,
-    BIFIEsurvey,
     knitr,
-    rmarkdown
+    rmarkdown,
+    segregation,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Config/testthat/edition: 3
-URL: https://github.com/kevisc/lsastrat
+URL: https://github.com/kevisc/lsastrat, https://kevisc.github.io/lsastrat/
 BugReports: https://github.com/kevisc/lsastrat/issues

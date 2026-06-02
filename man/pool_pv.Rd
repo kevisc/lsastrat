@@ -4,24 +4,30 @@
 \alias{pool_pv}
 \title{Pool point estimates and variances across plausible values (Rubin's rules)}
 \usage{
-pool_pv(estimates, variances)
+pool_pv(estimates, variances, level = 0.95)
 }
 \arguments{
 \item{estimates}{Numeric vector of per-PV point estimates
-(\eqn{\hat\theta_p}), length \code{m} = number of PVs.}
+(\eqn{\hat\theta_p}), length \code{m} = number of plausible values.}
 
 \item{variances}{Numeric vector of per-PV \emph{sampling} variances
-(\eqn{U_p}), same length. Pass a vector of zeros when no design-based
-variance is available (the result is then the imputation variance only).}
+(\eqn{U_p}), same length. Pass zeros when no design-based variance is
+available (the result is then the imputation variance only). A non-finite
+entry propagates to an \code{NA} standard error rather than an error.}
+
+\item{level}{Confidence level for the returned interval (default \code{0.95}).}
 }
 \value{
-A named list: \code{estimate}, \code{se}, \code{t} (estimate / se), \code{p} (two-sided
-normal), \code{var_sampling} (\eqn{\bar U}), \code{var_imputation} (the
-\eqn{(1 + 1/m) B} term), and \code{m}.
+A named list: \code{estimate}, \code{se}, \code{statistic} (estimate / se), \code{df}
+(Rubin degrees of freedom), \code{p} (two-sided), \code{ci_lo}, \code{ci_hi},
+\code{var_sampling} (\eqn{\bar U}), \code{var_imputation} (the \eqn{(1 + 1/m) B}
+term), and \code{m}.
 }
 \description{
-Combines per-PV point estimates and their (design-based) sampling variances
-into a single estimate, standard error, and normal-approximation test.
+Combines per-plausible-value point estimates and their (design-based)
+sampling variances into a single estimate, standard error, and
+\eqn{t}-reference test following the multiple-imputation combining rules of
+Rubin (1987).
 }
 \details{
 With \code{m} plausible values the pooled estimate is the mean of the per-PV
@@ -29,5 +35,21 @@ estimates. The total variance is
 \deqn{T = \bar U + (1 + 1/m) B,}
 where \eqn{\bar U} is the mean sampling variance (within-imputation) and
 \eqn{B} is the between-PV variance (the imputation/measurement component).
-This is the standard combination rule used for PISA, TIMSS and PIRLS.
+Inference uses a \eqn{t} reference with Rubin's degrees of freedom
+\deqn{\nu = (m - 1)\left(1 + \frac{\bar U}{(1 + 1/m) B}\right)^2,}
+which correctly widens intervals when the imputation component is
+non-negligible relative to the sampling component (the usual case for the
+small number of plausible values, 5 or 10, in PISA/TIMSS/PIRLS). When there
+is no imputation variance (a single plausible value) the reference reduces
+to the normal (\eqn{\nu = \infty}); when there is no sampling variance the
+reference is \eqn{t} on \eqn{m - 1} degrees of freedom.
+}
+\examples{
+# five plausible values, each with a sampling variance of 4
+pool_pv(estimates = c(508, 511, 509, 513, 510), variances = rep(16, 5))
+}
+\references{
+Rubin, D. B. (1987). \emph{Multiple Imputation for Nonresponse in Surveys}.
+Wiley. Barnard, J. & Rubin, D. B. (1999). Small-sample degrees of freedom
+with multiple imputation. \emph{Biometrika}, 86(4), 948-955.
 }

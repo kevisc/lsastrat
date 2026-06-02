@@ -1,0 +1,116 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file. -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# lsastrat
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/kevisc/lsastrat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kevisc/lsastrat/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/kevisc/lsastrat/graph/badge.svg)](https://app.codecov.io/gh/kevisc/lsastrat)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
+
+**Stratification and inequality metrics for large-scale assessment (LSA) data.**
+
+`lsastrat` computes the educational-stratification quantities that
+PISA/TIMSS/PIRLS researchers normally hand-assemble, and returns them as
+first-class objects with correct **plausible-value pooling** (Rubin's rules)
+and **replicate-weight variance** (BRR/Fay, JK2, JK1):
+
+* `social_gradient()` — the socio-economic achievement gradient (slope,
+  strength = *R*² × 100, curvature).
+* `segregation_index()` — school segregation indices (Dissimilarity, Gorard's
+  S, isolation, Hutchens, Theil's H, mutual information) with a two-stage
+  clustered bootstrap and **finite-sample bias correction**.
+* `ieop()` — the Ferreira–Gignoux decomposition of inequality of educational
+  opportunity.
+
+General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`, OECD's
+`Rrepest`) handle plausible values and replicate weights but expose only
+generic estimators (means, regression, correlation); none emits these
+stratification quantities as labelled outputs. `lsastrat` fills that gap and is
+designed to sit *alongside* those engines.
+
+## Installation
+
+```r
+# install.packages("remotes")
+remotes::install_github("kevisc/lsastrat")
+```
+
+## Example
+
+All examples use the bundled, fully simulated `pisa_mini` data set.
+
+```{r gradient}
+library(lsastrat)
+data(pisa_mini)
+
+reps <- paste0("W_FSTURWT", 1:64)
+
+social_gradient(
+  pisa_mini,
+  achievement = paste0("PV", 1:10, "MATH"),
+  escs = "ESCS", weight = "W_FSTUWT", repweights = reps
+)
+```
+
+```{r segregation}
+# social segregation by immigrant background, bias-corrected bootstrap variance
+segregation_index(
+  pisa_mini, unit = "school_id", group = "IMMIG", weight = "W_FSTUWT",
+  variance = "bootstrap", n_boot = 199, boot_seed = 1
+)
+```
+
+```{r ieop}
+# inequality of opportunity attributable to circumstances
+ieop(
+  pisa_mini,
+  achievement = paste0("PV", 1:10, "MATH"),
+  circumstances = c("IMMIG", "parental_edu", "books"),
+  weight = "W_FSTUWT", repweights = reps
+)
+```
+
+Every estimator returns an `lsastrat_estimate` object, so `coef()`,
+`confint()`, `as.data.frame()` and `plot()` work uniformly.
+
+## Validation
+
+The estimators are cross-validated against established implementations:
+`social_gradient()` reproduces `intsvy::pisa.reg.pv()`; the Dissimilarity and
+Theil's H indices match the `segregation` package; and `ieop()` matches a
+weighted regression *R*².
+
+## Citation
+
+See `citation("lsastrat")`.
+
+## Getting help & contributing
+
+Please report bugs and ask questions on the
+[issue tracker](https://github.com/kevisc/lsastrat/issues). See
+[CONTRIBUTING](.github/CONTRIBUTING.md) and the
+[Code of Conduct](.github/CODE_OF_CONDUCT.md).
+
+## Roadmap
+
+A plausible-value/weight-aware specification-curve (multiverse) engine and a
+reusable `lsa_design()` object are planned for a future release.
+
+## License
+
+MIT © Kevin Schoenholzer

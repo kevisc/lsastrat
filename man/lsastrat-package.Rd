@@ -25,12 +25,18 @@ variance (design-based); the spread \emph{across} PVs gives the \emph{imputation
 Useful links:
 \itemize{
   \item \url{https://github.com/kevisc/lsastrat}
+  \item \url{https://kevisc.github.io/lsastrat/}
   \item Report bugs at \url{https://github.com/kevisc/lsastrat/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Kevin Schoenholzer \email{kevinschonholzer@gmail.com} (\href{https://orcid.org/0000-0001-9892-5869}{ORCID})
+\strong{Maintainer}: Kevin Schoenholzer \email{kevinschonholzer@gmail.com} (\href{https://orcid.org/0000-0001-9892-5869}{ORCID}) [copyright holder]
+
+Other contributors:
+\itemize{
+  \item Swiss National Science Foundation (Grant 205177) [funder]
+}
 
 }
 \keyword{internal}
