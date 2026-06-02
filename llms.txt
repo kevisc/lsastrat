@@ -1,0 +1,194 @@
+# lsastrat
+
+**Stratification and inequality metrics for large-scale assessment (LSA)
+data.**
+
+`lsastrat` computes the educational-stratification quantities that
+PISA/TIMSS/PIRLS researchers normally hand-assemble, and returns them as
+first-class objects with correct **plausible-value pooling** (Rubin’s
+rules) and **replicate-weight variance** (BRR/Fay, JK2, JK1):
+
+- [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+  — the socio-economic achievement gradient (slope, strength = *R*² ×
+  100, curvature).
+- [`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md)
+  — school segregation indices (Dissimilarity, Gorard’s S, isolation,
+  Hutchens, Theil’s H, mutual information) with a two-stage clustered
+  bootstrap and **finite-sample bias correction**.
+- [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) — the
+  Ferreira–Gignoux decomposition of inequality of educational
+  opportunity.
+
+General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`,
+OECD’s `Rrepest`) handle plausible values and replicate weights but
+expose only generic estimators (means, regression, correlation); none
+emits these stratification quantities as labelled outputs. `lsastrat`
+fills that gap and is designed to sit *alongside* those engines.
+
+## Installation
+
+``` r
+
+# install.packages("remotes")
+remotes::install_github("kevisc/lsastrat")
+```
+
+## Example
+
+All examples use the bundled, fully simulated `pisa_mini` data set.
+
+``` r
+
+library(lsastrat)
+data(pisa_mini)
+
+reps <- paste0("W_FSTURWT", 1:64)
+
+social_gradient(
+  pisa_mini,
+  achievement = paste0("PV", 1:10, "MATH"),
+  escs = "ESCS", weight = "W_FSTUWT", repweights = reps
+)
+#> Socio-economic achievement gradient
+#>   SES index: ESCS   |   10 plausible value(s)   |   n = 2048
+#>   Variance:  BRR, 64 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>           Estimate Std.Error     t    df       p
+#> slope       41.357     1.831 22.59 399.4 2.1e-73
+#> strength    20.189     1.799 11.22 389.1 1.7e-25
+#> curvature    1.025     1.597  0.64 406.7 5.2e-01
+#> 
+#> slope = score points per 1 unit of ESCS; strength = % variance explained (R^2 x 100)
+```
+
+``` r
+
+# social segregation by immigrant background, bias-corrected bootstrap variance
+segregation_index(
+  pisa_mini, unit = "school_id", group = "IMMIG", weight = "W_FSTUWT",
+  variance = "bootstrap", n_boot = 199, boot_seed = 1
+)
+#> Segregation indices (social segregation)
+#>   unit: school_id  |  128 units  |  3 group(s)  |  minority: first_gen
+#>   Variance: clustered bootstrap (B=199, cluster=school_id), bias-corrected
+#> 
+#> 
+#>           Estimate Std.Error     t  df       p
+#> D            0.575     0.038 15.12 Inf 1.2e-51
+#> S            0.550     0.041 13.41 Inf 5.1e-41
+#> isolation    0.100     0.028  3.53 Inf 4.1e-04
+#> Hutchens     0.359     0.037  9.70 Inf 3.0e-22
+#> H            0.096     0.018  5.25 Inf 1.5e-07
+#> M            0.075     0.017  4.49 Inf 7.1e-06
+```
+
+``` r
+
+# inequality of opportunity attributable to circumstances
+ieop(
+  pisa_mini,
+  achievement = paste0("PV", 1:10, "MATH"),
+  circumstances = c("IMMIG", "parental_edu", "books"),
+  weight = "W_FSTUWT", repweights = reps
+)
+#> Inequality of educational opportunity (Ferreira-Gignoux)
+#>   10 plausible value(s)  |  n = 2048  |  3 circumstance(s): IMMIG, parental_edu, books
+#>   Variance: BRR, 64 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>               Estimate Std.Error     t     df        p
+#> iop              0.209     0.018 11.79  612.6  4.6e-29
+#> iop_adj          0.206     0.018 11.58  610.7  3.7e-28
+#> explained_var 1518.225   143.167 10.60 1204.1  3.5e-25
+#> total_var     7253.731   228.176 31.79  517.7 8.7e-124
+#> 
+#> iop = share of achievement variance explained by circumstances (raw R^2, upper bound); iop_adj = df-adjusted
+```
+
+Every estimator returns an `lsastrat_estimate` object, so
+[`coef()`](https://rdrr.io/r/stats/coef.html),
+[`confint()`](https://rdrr.io/r/stats/confint.html),
+[`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) and
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) work uniformly.
+
+## Validation
+
+The estimators are cross-validated against established implementations:
+[`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+reproduces
+[`intsvy::pisa.reg.pv()`](https://rdrr.io/pkg/intsvy/man/pisa.reg.pv.html);
+the Dissimilarity and Theil’s H indices match the `segregation` package;
+and [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md)
+matches a weighted regression *R*².
+
+## Citation
+
+See `citation("lsastrat")`.
+
+## Getting help & contributing
+
+Please report bugs and ask questions on the [issue
+tracker](https://github.com/kevisc/lsastrat/issues). See
+[CONTRIBUTING](https://kevisc.github.io/lsastrat/CONTRIBUTING.md) and
+the [Code of
+Conduct](https://kevisc.github.io/lsastrat/CODE_OF_CONDUCT.md).
+
+## Roadmap
+
+A plausible-value/weight-aware specification-curve (multiverse) engine
+and a reusable `lsa_design()` object are planned for a future release.
+
+## License
+
+MIT © Kevin Schoenholzer
+
+# Package index
+
+## Estimators
+
+First-class stratification and inequality quantities.
+
+- [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+  : Socio-economic achievement gradient
+- [`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md)
+  : School segregation indices for large-scale assessment data
+- [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) :
+  Inequality of educational opportunity (Ferreira-Gignoux)
+
+## Variance engine
+
+The shared plausible-value pooling and replicate-weight machinery.
+
+- [`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md)
+  : Pool point estimates and variances across plausible values (Rubin's
+  rules)
+- [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md)
+  : Replicate-weight variance factors
+
+## Methods
+
+Accessors for fitted estimate objects.
+
+- [`print(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+  [`summary(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+  [`coef(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+  [`confint(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+  [`as.data.frame(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+  : Methods for lsastrat estimate objects
+- [`plot(`*`<social_gradient>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.social_gradient.md)
+  : Plot a socio-economic achievement gradient
+- [`plot(`*`<segregation>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.segregation.md)
+  : Plot a school segregation profile
+
+## Data
+
+- [`pisa_mini`](https://kevisc.github.io/lsastrat/reference/pisa_mini.md)
+  : Simulated PISA-like assessment data
+
+# Articles
+
+### All vignettes
+
+- [Getting started with
+  lsastrat](https://kevisc.github.io/lsastrat/articles/lsastrat.md):
