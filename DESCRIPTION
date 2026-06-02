@@ -2,11 +2,9 @@ Package: lsastrat
 Title: Stratification and Inequality Metrics for Large-Scale Assessment Data
 Version: 0.1.0
 Authors@R:
-    c(person("Kevin", "Schoenholzer", , "kevinschonholzer@gmail.com",
-             role = c("aut", "cre", "cph"),
-             comment = c(ORCID = "0000-0001-9892-5869")),
-      person("Swiss National Science Foundation", role = "fnd",
-             comment = "Grant 205177"))
+    person("Kevin", "Schoenholzer", , "kevinschonholzer@gmail.com",
+           role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0001-9892-5869"))
 Description: Computes educational stratification and inequality quantities
     from large-scale assessment (LSA) data such as PISA, TIMSS and PIRLS as
     first-class outputs, with plausible-value pooling (Rubin's rules) and
