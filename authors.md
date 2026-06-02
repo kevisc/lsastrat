@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/kevisc/lsastrat/blob/v0.1.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/kevisc/lsastrat/blob/main/inst/CITATION)
 
 Schoenholzer, K. (2026). lsastrat: Stratification and Inequality Metrics
 for Large-Scale Assessment Data. R package version 0.1.0.

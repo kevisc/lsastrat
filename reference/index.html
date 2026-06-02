@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,73 @@
 
         </dt>
         <dd>Inequality of educational opportunity (Ferreira-Gignoux)</dd>
+
+        <dt>
+
+          <code><a href="variance_decomposition.html">variance_decomposition()</a></code>
+
+        </dt>
+        <dd>Between- and within-school variance decomposition</dd>
+      </dl></div><div class="section level2">
+      <h2 id="decompositions">Decompositions<a class="anchor" aria-label="anchor" href="#decompositions"></a></h2>
+
+      <div class="section-desc"><p>Attributing inequality to its sources.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="ieop_decompose.html">ieop_decompose()</a></code>
+
+        </dt>
+        <dd>Shapley decomposition of inequality of educational opportunity</dd>
+
+        <dt>
+
+          <code><a href="oaxaca_gap.html">oaxaca_gap()</a></code>
+
+        </dt>
+        <dd>Oaxaca-Blinder decomposition of an achievement gap</dd>
+      </dl></div><div class="section level2">
+      <h2 id="comparison-and-multiverse">Comparison and multiverse<a class="anchor" aria-label="anchor" href="#comparison-and-multiverse"></a></h2>
+
+      <div class="section-desc"><p>Comparative and robustness analysis.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="lsa_by.html">lsa_by()</a></code>
+
+        </dt>
+        <dd>Run an estimator across groups (e.g. countries)</dd>
+
+        <dt>
+
+          <code><a href="equity_scatter.html">equity_scatter()</a></code>
+
+        </dt>
+        <dd>Quality-equity scatter across groups</dd>
+
+        <dt>
+
+          <code><a href="lsa_multiverse.html">lsa_multiverse()</a></code>
+
+        </dt>
+        <dd>Plausible-value / weight-aware multiverse (specification-curve) analysis</dd>
+
+        <dt>
+
+          <code><a href="lsa_design.html">lsa_design()</a></code>
+
+        </dt>
+        <dd>Bundle a survey design for reuse</dd>
       </dl></div><div class="section level2">
       <h2 id="variance-engine">Variance engine<a class="anchor" aria-label="anchor" href="#variance-engine"></a></h2>
 
@@ -88,7 +155,7 @@
       </dl></div><div class="section level2">
       <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
-      <div class="section-desc"><p>Accessors for fitted estimate objects.</p></div>
+      <div class="section-desc"><p>Accessors and plots for fitted objects.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -104,6 +171,13 @@
 
         <dt>
 
+          <code><a href="autoplot.lsastrat.html">autoplot(<i>&lt;lsastrat_estimate&gt;</i>)</a></code> <code><a href="autoplot.lsastrat.html">autoplot(<i>&lt;social_gradient&gt;</i>)</a></code> <code><a href="autoplot.lsastrat.html">autoplot(<i>&lt;lsastrat_by&gt;</i>)</a></code> <code><a href="autoplot.lsastrat.html">autoplot(<i>&lt;equity_scatter&gt;</i>)</a></code> <code><a href="autoplot.lsastrat.html">autoplot(<i>&lt;lsa_multiverse&gt;</i>)</a></code>
+
+        </dt>
+        <dd>ggplot2 autoplot methods</dd>
+
+        <dt>
+
           <code><a href="plot.social_gradient.html">plot(<i>&lt;social_gradient&gt;</i>)</a></code>
 
         </dt>
@@ -115,6 +189,27 @@
 
         </dt>
         <dd>Plot a school segregation profile</dd>
+
+        <dt>
+
+          <code><a href="plot.lsastrat_by.html">plot(<i>&lt;lsastrat_by&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Forest / caterpillar plot of an estimate across groups</dd>
+
+        <dt>
+
+          <code><a href="plot.equity_scatter.html">plot(<i>&lt;equity_scatter&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot a quality-equity scatter</dd>
+
+        <dt>
+
+          <code><a href="plot.lsa_multiverse.html">plot(<i>&lt;lsa_multiverse&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Specification-curve plot</dd>
       </dl></div><div class="section level2">
       <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
 

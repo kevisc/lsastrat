@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Stratification and Inequality Metrics for Large-Scale Assessment Data">
-<meta name="description" content="Computes educational stratification and inequality quantities from large-scale assessment (LSA) data such as PISA, TIMSS and PIRLS as first-class outputs, with plausible-value pooling (Rubins rules) and survey replicate-weight variance estimation (balanced repeated replication, including Fays method, and jackknife). Provides the socio-economic achievement gradient (slope, strength and curvature), school-level segregation indices with a clustered bootstrap and finite-sample bias correction, and the Ferreira-Gignoux decomposition of inequality of educational opportunity. Complements general LSA packages (such as EdSurvey, intsvy and BIFIEsurvey) by packaging stratification measures that those tools leave to be assembled by hand.">
-<meta property="og:description" content="Computes educational stratification and inequality quantities from large-scale assessment (LSA) data such as PISA, TIMSS and PIRLS as first-class outputs, with plausible-value pooling (Rubins rules) and survey replicate-weight variance estimation (balanced repeated replication, including Fays method, and jackknife). Provides the socio-economic achievement gradient (slope, strength and curvature), school-level segregation indices with a clustered bootstrap and finite-sample bias correction, and the Ferreira-Gignoux decomposition of inequality of educational opportunity. Complements general LSA packages (such as EdSurvey, intsvy and BIFIEsurvey) by packaging stratification measures that those tools leave to be assembled by hand.">
+<meta name="description" content="Computes educational stratification and inequality quantities from large-scale assessment (LSA) data such as PISA, TIMSS and PIRLS as first-class outputs, with plausible-value pooling (Rubins rules) and survey replicate-weight variance estimation (balanced repeated replication, including Fays method, and jackknife). Provides the socio-economic achievement gradient (slope, strength and curvature), school-level segregation indices with a clustered bootstrap and finite-sample bias correction, and the Ferreira-Gignoux decomposition of inequality of educational opportunity. Further tools decompose these quantities (between/within-school variance, a Shapley decomposition of inequality of opportunity, and Oaxaca-Blinder achievement-gap decomposition), compare them across groups, and run plausible-value and replicate-weight aware specification-curve (multiverse) analyses. Complements general LSA packages (such as EdSurvey, intsvy and BIFIEsurvey) by packaging stratification measures that those tools leave to be assembled by hand.">
+<meta property="og:description" content="Computes educational stratification and inequality quantities from large-scale assessment (LSA) data such as PISA, TIMSS and PIRLS as first-class outputs, with plausible-value pooling (Rubins rules) and survey replicate-weight variance estimation (balanced repeated replication, including Fays method, and jackknife). Provides the socio-economic achievement gradient (slope, strength and curvature), school-level segregation indices with a clustered bootstrap and finite-sample bias correction, and the Ferreira-Gignoux decomposition of inequality of educational opportunity. Further tools decompose these quantities (between/within-school variance, a Shapley decomposition of inequality of opportunity, and Oaxaca-Blinder achievement-gap decomposition), compare them across groups, and run plausible-value and replicate-weight aware specification-curve (multiverse) analyses. Complements general LSA packages (such as EdSurvey, intsvy and BIFIEsurvey) by packaging stratification measures that those tools leave to be assembled by hand.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,7 @@
 <li>
 <code><a href="reference/ieop.html">ieop()</a></code> — the Ferreira–Gignoux decomposition of inequality of educational opportunity.</li>
 </ul>
+<p>It also <strong>decomposes</strong> these quantities (between/within-school variance, Shapley decomposition of inequality of opportunity, Oaxaca–Blinder gap decomposition), <strong>compares</strong> them across countries/subgroups (<code><a href="reference/lsa_by.html">lsa_by()</a></code>, <code><a href="reference/equity_scatter.html">equity_scatter()</a></code>), and runs PV/weight-aware <strong>specification-curve (multiverse)</strong> analyses (<code><a href="reference/lsa_multiverse.html">lsa_multiverse()</a></code>), with base and <code>ggplot2</code> (<code>autoplot()</code>) graphics throughout.</p>
 <p>General LSA packages (<code>EdSurvey</code>, <code>intsvy</code>, <code>BIFIEsurvey</code>, <code>RALSA</code>, OECD’s <code>Rrepest</code>) handle plausible values and replicate weights but expose only generic estimators (means, regression, correlation); none emits these stratification quantities as labelled outputs. <code>lsastrat</code> fills that gap and is designed to sit <em>alongside</em> those engines.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -154,7 +155,7 @@
 <div class="section level2">
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
 </h2>
-<p>A plausible-value/weight-aware specification-curve (multiverse) engine and a reusable <code>lsa_design()</code> object are planned for a future release.</p>
+<p>Cross-fitted (sample-split) inequality of opportunity and stratified multiverse designs are planned for future releases.</p>
 </div>
 <div class="section level2">
 <h2 id="funding">Funding<a class="anchor" aria-label="anchor" href="#funding"></a>

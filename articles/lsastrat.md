@@ -183,6 +183,132 @@ ceiling. `explained_var` is the absolute inequality of opportunity
 (variance of predicted scores) and `total_var` the total achievement
 variance.
 
+## Comparing groups
+
+[`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md) runs
+any estimator across the levels of a grouping variable and stacks the
+results into one comparable table – the workhorse for cross-country
+work.
+[`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)
+draws the OECD quality-vs-equity scatter.
+
+``` r
+
+by_imm <- lsa_by(pisa_mini, by = "IMMIG", estimator = social_gradient,
+                 achievement = math, escs = "ESCS", weight = "W_FSTUWT",
+                 repweights = reps)
+by_imm
+#> `social_gradient` by IMMIG  (3 groups)
+#> 
+#>       group      term estimate     se statistic       df     p   ci_lo  ci_hi
+#>      native     slope   41.867  2.070    20.224  580.355 0.000  37.801 45.933
+#>      native  strength   20.192  1.934    10.438  346.181 0.000  16.388 23.997
+#>      native curvature    0.752  1.920     0.392  242.884 0.696  -3.031  4.534
+#>  second_gen     slope   39.234  3.548    11.058  792.323 0.000  32.269 46.198
+#>  second_gen  strength   17.931  2.935     6.108  425.972 0.000  12.161 23.700
+#>  second_gen curvature    0.560  2.792     0.201 1125.479 0.841  -4.919  6.039
+#>   first_gen     slope   32.697 11.252     2.906  338.768 0.004  10.566 54.829
+#>   first_gen  strength   13.126  9.079     1.446  258.647 0.149  -4.752 31.003
+#>   first_gen curvature    7.279  8.914     0.817  600.676 0.414 -10.227 24.785
+```
+
+## Decomposing inequality
+
+Three decompositions break a quantity into interpretable parts. The
+between-school variance share (a strongly stratified system has a high
+value):
+
+``` r
+
+variance_decomposition(pisa_mini, math, unit = "school_id",
+                       weight = "W_FSTUWT", repweights = reps)
+#> Between/within-unit variance decomposition
+#>   unit: school_id  |  128 units  |  10 plausible value(s)  |  n = 2048
+#>   Variance: BRR, 64 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>             Estimate Std.Error     t     df        p
+#> icc            0.153     0.017  9.15 1259.2  2.3e-19
+#> var_between 1110.411   133.168  8.34 1561.8  1.6e-16
+#> var_within  6143.320   205.537 29.89  384.4 2.7e-102
+#> var_total   7253.731   228.176 31.79  517.7 8.7e-124
+#> 
+#> icc = between-unit share of achievement variance
+```
+
+The Shapley decomposition attributes the inequality of opportunity to
+each circumstance (the contributions sum to the total relative IOp):
+
+``` r
+
+ieop_decompose(pisa_mini, math,
+               circumstances = c("IMMIG", "parental_edu", "books"),
+               weight = "W_FSTUWT", repweights = reps)
+#> Inequality of opportunity: Shapley decomposition
+#>   10 plausible value(s)  |  n = 2048  |  3 circumstance(s)
+#>   Variance: BRR, 64 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>              Estimate Std.Error    t    df       p
+#> IMMIG           0.009     0.005 2.01 425.3 4.5e-02
+#> parental_edu    0.106     0.013 7.86 263.8 9.8e-14
+#> books           0.094     0.013 7.44 178.5 4.1e-12
+#> 
+#> Shapley contributions to relative IOp (R^2); they sum to the total
+```
+
+The Oaxaca-Blinder decomposition splits an achievement gap into an
+explained (composition) and an unexplained (structure) part:
+
+``` r
+
+d2 <- pisa_mini[pisa_mini$IMMIG %in% c("native", "first_gen"), ]
+d2$IMMIG <- factor(d2$IMMIG)
+oaxaca_gap(d2, math, group = "IMMIG",
+           predictors = c("ESCS", "books", "parental_edu"),
+           weight = "W_FSTUWT", repweights = reps)
+#> Oaxaca-Blinder gap decomposition (twofold)
+#>   IMMIG: native - first_gen  |  10 plausible value(s)  |  n = 1421
+#>   Variance: BRR, 64 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>             Estimate Std.Error    t       df       p
+#> gap           32.004     9.690 3.30    627.4 1.0e-03
+#> explained     29.250     5.364 5.45 134118.7 5.0e-08
+#> unexplained    2.755     8.819 0.31    476.5 7.5e-01
+#> 
+#> gap = mean(native) - mean(first_gen); components sum to gap
+```
+
+## Multiverse analysis
+
+[`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+runs an estimator across a grid of analytic forking paths so you can
+read off how robust a finding is. Bundle the design once with
+[`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md):
+
+``` r
+
+des <- lsa_design(weight = "W_FSTUWT", repweights = reps)
+mv <- lsa_multiverse(
+  pisa_mini, estimator = social_gradient,
+  grid = list(
+    achievement = list(math = math, read = paste0("PV", 1:10, "READ")),
+    curvature = list(linear = FALSE, quadratic = TRUE)
+  ),
+  fixed = list(escs = "ESCS"), design = des, term = "slope")
+mv
+#> Multiverse: `social_gradient`, term = slope  (4 specifications)
+#>   median estimate: 39.1   range: [36.8, 41.4]
+#>   100% of specifications same-signed; 100% exclude 0 (95% CI)
+```
+
+Every result has a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method, and an
+`autoplot()` method when ggplot2 is installed
+(e.g. `autoplot(by_imm, term = "slope")` for a forest plot, or
+`autoplot(mv)` for the specification curve).
+
 ## Where it fits
 
 `lsastrat` complements rather than replaces general LSA packages such as

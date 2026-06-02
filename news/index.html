@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,9 +30,41 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/kevisc/lsastrat/blob/v0.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/kevisc/lsastrat/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="lsastrat-020">lsastrat 0.2.0<a class="anchor" aria-label="anchor" href="#lsastrat-020"></a></h2>
+<p>Comparative analysis, decompositions, a multiverse engine, and ggplot2 support.</p>
+<div class="section level3">
+<h3 id="comparative-analysis-0-2-0">Comparative analysis<a class="anchor" aria-label="anchor" href="#comparative-analysis-0-2-0"></a></h3>
+<ul><li>
+<code><a href="../reference/lsa_by.html">lsa_by()</a></code>: run any estimator across the levels of a grouping variable (e.g. countries) and stack the pooled coefficients into one tidy, comparable table.</li>
+<li>
+<code><a href="../reference/equity_scatter.html">equity_scatter()</a></code>: the OECD-style quality-vs-equity scatter (mean achievement against gradient strength) across groups.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-estimators-0-2-0">New estimators<a class="anchor" aria-label="anchor" href="#new-estimators-0-2-0"></a></h3>
+<ul><li>
+<code><a href="../reference/variance_decomposition.html">variance_decomposition()</a></code>: between- vs within-school variance decomposition and the intraclass correlation (between-school share).</li>
+<li>
+<code><a href="../reference/ieop_decompose.html">ieop_decompose()</a></code>: Shapley decomposition attributing the inequality of educational opportunity to each circumstance (contributions sum to the total).</li>
+<li>
+<code><a href="../reference/oaxaca_gap.html">oaxaca_gap()</a></code>: twofold and threefold Oaxaca-Blinder decomposition of an achievement gap into explained (composition) and unexplained (structure).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="multiverse-0-2-0">Multiverse<a class="anchor" aria-label="anchor" href="#multiverse-0-2-0"></a></h3>
+<ul><li>
+<code><a href="../reference/lsa_multiverse.html">lsa_multiverse()</a></code> and <code><a href="../reference/lsa_design.html">lsa_design()</a></code>: a plausible-value / replicate-weight aware specification-curve engine – run an estimator across a grid of analytic forking paths and summarise the robustness of a finding, with a specification-curve plot.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="visualisation-0-2-0">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation-0-2-0"></a></h3>
+<ul><li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods for <code>lsastrat_by</code>, <code>equity_scatter</code> and <code>lsa_multiverse</code>.</li>
+<li>
+<code>autoplot()</code> methods (ggplot2, Suggests) for estimates, the gradient, by-group forests, the equity scatter and the specification curve.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="lsastrat-010">lsastrat 0.1.0<a class="anchor" aria-label="anchor" href="#lsastrat-010"></a></h2>
 <p>First public release. <code>lsastrat</code> computes educational stratification and inequality quantities from large-scale assessment data (PISA, TIMSS, PIRLS) as first-class outputs, with plausible-value pooling and replicate-weight variance.</p>

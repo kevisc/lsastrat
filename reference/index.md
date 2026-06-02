@@ -10,6 +10,31 @@ First-class stratification and inequality quantities.
   : School segregation indices for large-scale assessment data
 - [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) :
   Inequality of educational opportunity (Ferreira-Gignoux)
+- [`variance_decomposition()`](https://kevisc.github.io/lsastrat/reference/variance_decomposition.md)
+  : Between- and within-school variance decomposition
+
+## Decompositions
+
+Attributing inequality to its sources.
+
+- [`ieop_decompose()`](https://kevisc.github.io/lsastrat/reference/ieop_decompose.md)
+  : Shapley decomposition of inequality of educational opportunity
+- [`oaxaca_gap()`](https://kevisc.github.io/lsastrat/reference/oaxaca_gap.md)
+  : Oaxaca-Blinder decomposition of an achievement gap
+
+## Comparison and multiverse
+
+Comparative and robustness analysis.
+
+- [`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md) :
+  Run an estimator across groups (e.g. countries)
+- [`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)
+  : Quality-equity scatter across groups
+- [`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+  : Plausible-value / weight-aware multiverse (specification-curve)
+  analysis
+- [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  : Bundle a survey design for reuse
 
 ## Variance engine
 
@@ -23,7 +48,7 @@ The shared plausible-value pooling and replicate-weight machinery.
 
 ## Methods
 
-Accessors for fitted estimate objects.
+Accessors and plots for fitted objects.
 
 - [`print(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
   [`summary(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
@@ -31,10 +56,22 @@ Accessors for fitted estimate objects.
   [`confint(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
   [`as.data.frame(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
   : Methods for lsastrat estimate objects
+- [`autoplot(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<social_gradient>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<lsastrat_by>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<equity_scatter>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<lsa_multiverse>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
+  : ggplot2 autoplot methods
 - [`plot(`*`<social_gradient>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.social_gradient.md)
   : Plot a socio-economic achievement gradient
 - [`plot(`*`<segregation>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.segregation.md)
   : Plot a school segregation profile
+- [`plot(`*`<lsastrat_by>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsastrat_by.md)
+  : Forest / caterpillar plot of an estimate across groups
+- [`plot(`*`<equity_scatter>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.equity_scatter.md)
+  : Plot a quality-equity scatter
+- [`plot(`*`<lsa_multiverse>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsa_multiverse.md)
+  : Specification-curve plot
 
 ## Data
 

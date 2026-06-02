@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
       <h1>Getting started with lsastrat</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kevisc/lsastrat/blob/v0.1.0/vignettes/lsastrat.Rmd" class="external-link"><code>vignettes/lsastrat.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kevisc/lsastrat/blob/main/vignettes/lsastrat.Rmd" class="external-link"><code>vignettes/lsastrat.Rmd</code></a></small>
       <div class="d-none name"><code>lsastrat.Rmd</code></div>
     </div>
 
@@ -220,6 +220,113 @@ it, and treat <code>iop</code> as the ceiling.
 <code>explained_var</code> is the absolute inequality of opportunity
 (variance of predicted scores) and <code>total_var</code> the total
 achievement variance.</p>
+</div>
+<div class="section level2">
+<h2 id="comparing-groups">Comparing groups<a class="anchor" aria-label="anchor" href="#comparing-groups"></a>
+</h2>
+<p><code><a href="../reference/lsa_by.html">lsa_by()</a></code> runs any estimator across the levels of a
+grouping variable and stacks the results into one comparable table – the
+workhorse for cross-country work. <code><a href="../reference/equity_scatter.html">equity_scatter()</a></code> draws
+the OECD quality-vs-equity scatter.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">by_imm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lsa_by.html">lsa_by</a></span><span class="op">(</span><span class="va">pisa_mini</span>, by <span class="op">=</span> <span class="st">"IMMIG"</span>, estimator <span class="op">=</span> <span class="va">social_gradient</span>,</span>
+<span>                 achievement <span class="op">=</span> <span class="va">math</span>, escs <span class="op">=</span> <span class="st">"ESCS"</span>, weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>,</span>
+<span>                 repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
+<span><span class="va">by_imm</span></span>
+<span><span class="co">#&gt; `social_gradient` by IMMIG  (3 groups)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;       group      term estimate     se statistic       df     p   ci_lo  ci_hi</span></span>
+<span><span class="co">#&gt;      native     slope   41.867  2.070    20.224  580.355 0.000  37.801 45.933</span></span>
+<span><span class="co">#&gt;      native  strength   20.192  1.934    10.438  346.181 0.000  16.388 23.997</span></span>
+<span><span class="co">#&gt;      native curvature    0.752  1.920     0.392  242.884 0.696  -3.031  4.534</span></span>
+<span><span class="co">#&gt;  second_gen     slope   39.234  3.548    11.058  792.323 0.000  32.269 46.198</span></span>
+<span><span class="co">#&gt;  second_gen  strength   17.931  2.935     6.108  425.972 0.000  12.161 23.700</span></span>
+<span><span class="co">#&gt;  second_gen curvature    0.560  2.792     0.201 1125.479 0.841  -4.919  6.039</span></span>
+<span><span class="co">#&gt;   first_gen     slope   32.697 11.252     2.906  338.768 0.004  10.566 54.829</span></span>
+<span><span class="co">#&gt;   first_gen  strength   13.126  9.079     1.446  258.647 0.149  -4.752 31.003</span></span>
+<span><span class="co">#&gt;   first_gen curvature    7.279  8.914     0.817  600.676 0.414 -10.227 24.785</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="decomposing-inequality">Decomposing inequality<a class="anchor" aria-label="anchor" href="#decomposing-inequality"></a>
+</h2>
+<p>Three decompositions break a quantity into interpretable parts. The
+between-school variance share (a strongly stratified system has a high
+value):</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/variance_decomposition.html">variance_decomposition</a></span><span class="op">(</span><span class="va">pisa_mini</span>, <span class="va">math</span>, unit <span class="op">=</span> <span class="st">"school_id"</span>,</span>
+<span>                       weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Between/within-unit variance decomposition</span></span>
+<span><span class="co">#&gt;   unit: school_id  |  128 units  |  10 plausible value(s)  |  n = 2048</span></span>
+<span><span class="co">#&gt;   Variance: BRR, 64 replicate weights (+ PV imputation); t reference</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             Estimate Std.Error     t     df        p</span></span>
+<span><span class="co">#&gt; icc            0.153     0.017  9.15 1259.2  2.3e-19</span></span>
+<span><span class="co">#&gt; var_between 1110.411   133.168  8.34 1561.8  1.6e-16</span></span>
+<span><span class="co">#&gt; var_within  6143.320   205.537 29.89  384.4 2.7e-102</span></span>
+<span><span class="co">#&gt; var_total   7253.731   228.176 31.79  517.7 8.7e-124</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; icc = between-unit share of achievement variance</span></span></code></pre></div>
+<p>The Shapley decomposition attributes the inequality of opportunity to
+each circumstance (the contributions sum to the total relative IOp):</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ieop_decompose.html">ieop_decompose</a></span><span class="op">(</span><span class="va">pisa_mini</span>, <span class="va">math</span>,</span>
+<span>               circumstances <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IMMIG"</span>, <span class="st">"parental_edu"</span>, <span class="st">"books"</span><span class="op">)</span>,</span>
+<span>               weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Inequality of opportunity: Shapley decomposition</span></span>
+<span><span class="co">#&gt;   10 plausible value(s)  |  n = 2048  |  3 circumstance(s)</span></span>
+<span><span class="co">#&gt;   Variance: BRR, 64 replicate weights (+ PV imputation); t reference</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;              Estimate Std.Error    t    df       p</span></span>
+<span><span class="co">#&gt; IMMIG           0.009     0.005 2.01 425.3 4.5e-02</span></span>
+<span><span class="co">#&gt; parental_edu    0.106     0.013 7.86 263.8 9.8e-14</span></span>
+<span><span class="co">#&gt; books           0.094     0.013 7.44 178.5 4.1e-12</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Shapley contributions to relative IOp (R^2); they sum to the total</span></span></code></pre></div>
+<p>The Oaxaca-Blinder decomposition splits an achievement gap into an
+explained (composition) and an unexplained (structure) part:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="va">pisa_mini</span><span class="op">[</span><span class="va">pisa_mini</span><span class="op">$</span><span class="va">IMMIG</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"native"</span>, <span class="st">"first_gen"</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">d2</span><span class="op">$</span><span class="va">IMMIG</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">d2</span><span class="op">$</span><span class="va">IMMIG</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/oaxaca_gap.html">oaxaca_gap</a></span><span class="op">(</span><span class="va">d2</span>, <span class="va">math</span>, group <span class="op">=</span> <span class="st">"IMMIG"</span>,</span>
+<span>           predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ESCS"</span>, <span class="st">"books"</span>, <span class="st">"parental_edu"</span><span class="op">)</span>,</span>
+<span>           weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Oaxaca-Blinder gap decomposition (twofold)</span></span>
+<span><span class="co">#&gt;   IMMIG: native - first_gen  |  10 plausible value(s)  |  n = 1421</span></span>
+<span><span class="co">#&gt;   Variance: BRR, 64 replicate weights (+ PV imputation); t reference</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             Estimate Std.Error    t       df       p</span></span>
+<span><span class="co">#&gt; gap           32.004     9.690 3.30    627.4 1.0e-03</span></span>
+<span><span class="co">#&gt; explained     29.250     5.364 5.45 134118.7 5.0e-08</span></span>
+<span><span class="co">#&gt; unexplained    2.755     8.819 0.31    476.5 7.5e-01</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; gap = mean(native) - mean(first_gen); components sum to gap</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="multiverse-analysis">Multiverse analysis<a class="anchor" aria-label="anchor" href="#multiverse-analysis"></a>
+</h2>
+<p><code><a href="../reference/lsa_multiverse.html">lsa_multiverse()</a></code> runs an estimator across a grid of
+analytic forking paths so you can read off how robust a finding is.
+Bundle the design once with <code><a href="../reference/lsa_design.html">lsa_design()</a></code>:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lsa_design.html">lsa_design</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
+<span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lsa_multiverse.html">lsa_multiverse</a></span><span class="op">(</span></span>
+<span>  <span class="va">pisa_mini</span>, estimator <span class="op">=</span> <span class="va">social_gradient</span>,</span>
+<span>  grid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    achievement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>math <span class="op">=</span> <span class="va">math</span>, read <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"PV"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="st">"READ"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    curvature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>linear <span class="op">=</span> <span class="cn">FALSE</span>, quadratic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>escs <span class="op">=</span> <span class="st">"ESCS"</span><span class="op">)</span>, design <span class="op">=</span> <span class="va">des</span>, term <span class="op">=</span> <span class="st">"slope"</span><span class="op">)</span></span>
+<span><span class="va">mv</span></span>
+<span><span class="co">#&gt; Multiverse: `social_gradient`, term = slope  (4 specifications)</span></span>
+<span><span class="co">#&gt;   median estimate: 39.1   range: [36.8, 41.4]</span></span>
+<span><span class="co">#&gt;   100% of specifications same-signed; 100% exclude 0 (95% CI)</span></span></code></pre></div>
+<p>Every result has a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, and an
+<code>autoplot()</code> method when ggplot2 is installed
+(e.g. <code>autoplot(by_imm, term = "slope")</code> for a forest plot,
+or <code>autoplot(mv)</code> for the specification curve).</p>
 </div>
 <div class="section level2">
 <h2 id="where-it-fits">Where it fits<a class="anchor" aria-label="anchor" href="#where-it-fits"></a>

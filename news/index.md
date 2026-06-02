@@ -1,5 +1,49 @@
 # Changelog
 
+## lsastrat 0.2.0
+
+Comparative analysis, decompositions, a multiverse engine, and ggplot2
+support.
+
+### Comparative analysis
+
+- [`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md):
+  run any estimator across the levels of a grouping variable (e.g.
+  countries) and stack the pooled coefficients into one tidy, comparable
+  table.
+- [`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md):
+  the OECD-style quality-vs-equity scatter (mean achievement against
+  gradient strength) across groups.
+
+### New estimators
+
+- [`variance_decomposition()`](https://kevisc.github.io/lsastrat/reference/variance_decomposition.md):
+  between- vs within-school variance decomposition and the intraclass
+  correlation (between-school share).
+- [`ieop_decompose()`](https://kevisc.github.io/lsastrat/reference/ieop_decompose.md):
+  Shapley decomposition attributing the inequality of educational
+  opportunity to each circumstance (contributions sum to the total).
+- [`oaxaca_gap()`](https://kevisc.github.io/lsastrat/reference/oaxaca_gap.md):
+  twofold and threefold Oaxaca-Blinder decomposition of an achievement
+  gap into explained (composition) and unexplained (structure).
+
+### Multiverse
+
+- [`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+  and
+  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md):
+  a plausible-value / replicate-weight aware specification-curve engine
+  – run an estimator across a grid of analytic forking paths and
+  summarise the robustness of a finding, with a specification-curve
+  plot.
+
+### Visualisation
+
+- [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods for
+  `lsastrat_by`, `equity_scatter` and `lsa_multiverse`.
+- `autoplot()` methods (ggplot2, Suggests) for estimates, the gradient,
+  by-group forests, the equity scatter and the specification curve.
+
 ## lsastrat 0.1.0
 
 First public release. `lsastrat` computes educational stratification and
