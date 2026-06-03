@@ -14,6 +14,7 @@ oaxaca_gap(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
+  design = NULL,
   type = c("twofold", "threefold"),
   level = 0.95
 )
@@ -37,6 +38,9 @@ weights are used (with a message).}
 \item{repweights}{Optional character vector of replicate-weight columns.}
 
 \item{rep_method, fay}{Replication design and Fay factor; see \code{\link[=rep_factor]{rep_factor()}}.}
+
+\item{design}{Optional \code{\link[=lsa_design]{lsa_design()}} bundling \code{weight}, \code{repweights},
+\code{rep_method} and \code{fay}; when supplied it overrides those arguments.}
 
 \item{type}{\code{"twofold"} (default) or \code{"threefold"}.}
 

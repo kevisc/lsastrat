@@ -19,6 +19,8 @@
 #'   weights are used (with a message).
 #' @param repweights Optional character vector of replicate-weight columns.
 #' @param rep_method,fay Replication design and Fay factor; see [rep_factor()].
+#' @param design Optional [lsa_design()] bundling `weight`, `repweights`,
+#'   `rep_method` and `fay`; when supplied it overrides those arguments.
 #' @param statistics Which quantities to return: `"icc"` (between-unit share),
 #'   `"var_between"`, `"var_within"`, `"var_total"`.
 #' @param level Confidence level for the stored interval (default `0.95`).
@@ -39,10 +41,14 @@ variance_decomposition <- function(data,
                                    repweights = NULL,
                                    rep_method = c("BRR", "JK2", "JK1"),
                                    fay = 0.5,
+                                   design = NULL,
                                    statistics = c("icc", "var_between",
                                                   "var_within", "var_total"),
                                    level = 0.95) {
   rep_method <- match.arg(rep_method)
+  .d <- .apply_design(design, weight, repweights, rep_method, fay)
+  weight <- .d$weight; repweights <- .d$repweights
+  rep_method <- .d$rep_method; fay <- .d$fay
   statistics <- match.arg(statistics, several.ok = TRUE)
   .assert_data_frame(data)
   .assert_character(achievement, "achievement")

@@ -38,8 +38,12 @@ ieop_decompose <- function(data,
                            repweights = NULL,
                            rep_method = c("BRR", "JK2", "JK1"),
                            fay = 0.5,
+                           design = NULL,
                            level = 0.95) {
   rep_method <- match.arg(rep_method)
+  .d <- .apply_design(design, weight, repweights, rep_method, fay)
+  weight <- .d$weight; repweights <- .d$repweights
+  rep_method <- .d$rep_method; fay <- .d$fay
   .assert_data_frame(data)
   .assert_character(achievement, "achievement")
   if (!is.character(circumstances) || length(circumstances) == 0L) {

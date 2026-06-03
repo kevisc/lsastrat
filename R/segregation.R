@@ -49,6 +49,8 @@
 #' @param repweights Optional character vector of replicate-weight columns
 #'   (used when `variance = "replicate"`).
 #' @param rep_method,fay Replication design and Fay factor; see [rep_factor()].
+#' @param design Optional [lsa_design()] bundling `weight`, `repweights`,
+#'   `rep_method` and `fay`; when supplied it overrides those arguments.
 #' @param variance Variance estimator: `"replicate"` (default when
 #'   `repweights` are supplied), `"bootstrap"` (default otherwise), or
 #'   `"none"` (point estimates only).
@@ -91,6 +93,7 @@ segregation_index <- function(data,
                               repweights = NULL,
                               rep_method = c("BRR", "JK2", "JK1"),
                               fay = 0.5,
+                              design = NULL,
                               variance = c("replicate", "bootstrap", "none"),
                               n_boot = 200L,
                               debias = TRUE,
@@ -98,6 +101,9 @@ segregation_index <- function(data,
                               boot_seed = NULL,
                               level = 0.95) {
   rep_method <- match.arg(rep_method)
+  .d <- .apply_design(design, weight, repweights, rep_method, fay)
+  weight <- .d$weight; repweights <- .d$repweights
+  rep_method <- .d$rep_method; fay <- .d$fay
   indices <- match.arg(indices, several.ok = TRUE)
   .assert_data_frame(data)
 

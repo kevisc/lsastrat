@@ -24,6 +24,8 @@
 #'   weights are used (with a message).
 #' @param repweights Optional character vector of replicate-weight columns.
 #' @param rep_method,fay Replication design and Fay factor; see [rep_factor()].
+#' @param design Optional [lsa_design()] bundling `weight`, `repweights`,
+#'   `rep_method` and `fay`; when supplied it overrides those arguments.
 #' @param type `"twofold"` (default) or `"threefold"`.
 #' @param level Confidence level for the stored interval (default `0.95`).
 #'
@@ -53,10 +55,14 @@ oaxaca_gap <- function(data,
                        repweights = NULL,
                        rep_method = c("BRR", "JK2", "JK1"),
                        fay = 0.5,
+                       design = NULL,
                        type = c("twofold", "threefold"),
                        level = 0.95) {
   rep_method <- match.arg(rep_method)
   type <- match.arg(type)
+  .d <- .apply_design(design, weight, repweights, rep_method, fay)
+  weight <- .d$weight; repweights <- .d$repweights
+  rep_method <- .d$rep_method; fay <- .d$fay
   .assert_data_frame(data)
   .assert_character(achievement, "achievement")
   .assert_character(predictors, "predictors")

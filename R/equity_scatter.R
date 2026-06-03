@@ -14,6 +14,8 @@
 #' @param weight Name of the final student weight column.
 #' @param repweights,rep_method,fay Replicate-weight specification passed to
 #'   [social_gradient()].
+#' @param design Optional [lsa_design()] bundling `weight`, `repweights`,
+#'   `rep_method` and `fay`; when supplied it overrides those arguments.
 #'
 #' @return An object of class `"equity_scatter"`: a list with `data` (a data
 #'   frame of `group`, `mean`, `slope`, `strength`) plus metadata. Plot it with
@@ -28,8 +30,12 @@
 #' @export
 equity_scatter <- function(data, by, achievement, escs = "ESCS",
                            weight = NULL, repweights = NULL,
-                           rep_method = c("BRR", "JK2", "JK1"), fay = 0.5) {
+                           rep_method = c("BRR", "JK2", "JK1"), fay = 0.5,
+                           design = NULL) {
   rep_method <- match.arg(rep_method)
+  .d <- .apply_design(design, weight, repweights, rep_method, fay)
+  weight <- .d$weight; repweights <- .d$repweights
+  rep_method <- .d$rep_method; fay <- .d$fay
   .assert_data_frame(data)
   .assert_columns(data, c(by, achievement, escs, weight, repweights))
 

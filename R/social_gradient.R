@@ -26,6 +26,8 @@
 #' @param rep_method Replication design: `"BRR"` (PISA default), `"JK2"`
 #'   (TIMSS/PIRLS) or `"JK1"`. Used only when `repweights` is supplied.
 #' @param fay Fay adjustment for BRR (PISA uses 0.5); see [rep_factor()].
+#' @param design Optional [lsa_design()] bundling `weight`, `repweights`,
+#'   `rep_method` and `fay`; when supplied it overrides those arguments.
 #' @param curvature Logical; if `TRUE` (default) also fit a quadratic model and
 #'   report the curvature (ESCS-squared) coefficient.
 #' @param level Confidence level for the stored interval (default `0.95`).
@@ -55,9 +57,13 @@ social_gradient <- function(data,
                             repweights = NULL,
                             rep_method = c("BRR", "JK2", "JK1"),
                             fay = 0.5,
+                            design = NULL,
                             curvature = TRUE,
                             level = 0.95) {
   rep_method <- match.arg(rep_method)
+  .d <- .apply_design(design, weight, repweights, rep_method, fay)
+  weight <- .d$weight; repweights <- .d$repweights
+  rep_method <- .d$rep_method; fay <- .d$fay
   .assert_data_frame(data)
   .assert_character(achievement, "achievement")
   .assert_columns(data, c(achievement, escs, weight, repweights))

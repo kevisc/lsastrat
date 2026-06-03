@@ -12,6 +12,7 @@ variance_decomposition(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
+  design = NULL,
   statistics = c("icc", "var_between", "var_within", "var_total"),
   level = 0.95
 )
@@ -29,6 +30,9 @@ weights are used (with a message).}
 \item{repweights}{Optional character vector of replicate-weight columns.}
 
 \item{rep_method, fay}{Replication design and Fay factor; see \code{\link[=rep_factor]{rep_factor()}}.}
+
+\item{design}{Optional \code{\link[=lsa_design]{lsa_design()}} bundling \code{weight}, \code{repweights},
+\code{rep_method} and \code{fay}; when supplied it overrides those arguments.}
 
 \item{statistics}{Which quantities to return: \code{"icc"} (between-unit share),
 \code{"var_between"}, \code{"var_within"}, \code{"var_total"}.}

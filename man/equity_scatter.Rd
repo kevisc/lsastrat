@@ -12,7 +12,8 @@ equity_scatter(
   weight = NULL,
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
-  fay = 0.5
+  fay = 0.5,
+  design = NULL
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ equity_scatter(
 
 \item{repweights, rep_method, fay}{Replicate-weight specification passed to
 \code{\link[=social_gradient]{social_gradient()}}.}
+
+\item{design}{Optional \code{\link[=lsa_design]{lsa_design()}} bundling \code{weight}, \code{repweights},
+\code{rep_method} and \code{fay}; when supplied it overrides those arguments.}
 }
 \value{
 An object of class \code{"equity_scatter"}: a list with \code{data} (a data

@@ -12,6 +12,7 @@ social_gradient(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
+  design = NULL,
   curvature = TRUE,
   level = 0.95
 )
@@ -36,6 +37,9 @@ model-based (independence) standard error is returned with a warning.}
 (TIMSS/PIRLS) or \code{"JK1"}. Used only when \code{repweights} is supplied.}
 
 \item{fay}{Fay adjustment for BRR (PISA uses 0.5); see \code{\link[=rep_factor]{rep_factor()}}.}
+
+\item{design}{Optional \code{\link[=lsa_design]{lsa_design()}} bundling \code{weight}, \code{repweights},
+\code{rep_method} and \code{fay}; when supplied it overrides those arguments.}
 
 \item{curvature}{Logical; if \code{TRUE} (default) also fit a quadratic model and
 report the curvature (ESCS-squared) coefficient.}

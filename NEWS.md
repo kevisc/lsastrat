@@ -1,3 +1,17 @@
+# lsastrat 0.3.0
+
+General estimation, a shared design object, and tidyverse integration.
+
+* `lsa_model()`: fit **any** model (`lm`, `glm`, multilevel via `lme4::lmer`,
+  ...) to plausible-value outcomes, with replicate-weight variance and Rubin
+  pooling. Lifts the package beyond the built-in estimators and beyond the
+  OLS-only support of comparable tools.
+* All estimators now accept a `design =` argument -- an [lsa_design()] object
+  bundling `weight`, `repweights`, `rep_method` and `fay` -- so those
+  arguments need not be repeated on every call.
+* `tidy()` and `glance()` methods (via the `generics` package) for
+  broom/tidyverse integration.
+
 # lsastrat 0.2.0
 
 Comparative analysis, decompositions, a multiverse engine, and ggplot2 support.

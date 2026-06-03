@@ -16,6 +16,7 @@ segregation_index(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
+  design = NULL,
   variance = c("replicate", "bootstrap", "none"),
   n_boot = 200L,
   debias = TRUE,
@@ -55,6 +56,9 @@ weights are used (with a message).}
 (used when \code{variance = "replicate"}).}
 
 \item{rep_method, fay}{Replication design and Fay factor; see \code{\link[=rep_factor]{rep_factor()}}.}
+
+\item{design}{Optional \code{\link[=lsa_design]{lsa_design()}} bundling \code{weight}, \code{repweights},
+\code{rep_method} and \code{fay}; when supplied it overrides those arguments.}
 
 \item{variance}{Variance estimator: \code{"replicate"} (default when
 \code{repweights} are supplied), \code{"bootstrap"} (default otherwise), or

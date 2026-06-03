@@ -1,6 +1,6 @@
 Package: lsastrat
 Title: Stratification and Inequality Metrics for Large-Scale Assessment Data
-Version: 0.2.0
+Version: 0.3.0
 Authors@R:
     person("Kevin", "Schoenholzer", , "kevinschonholzer@gmail.com",
            role = c("aut", "cre", "cph"),
@@ -30,6 +30,7 @@ RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
+    generics,
     graphics,
     stats,
     utils

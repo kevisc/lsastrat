@@ -33,3 +33,19 @@
     data[[weight]]
   }
 }
+
+# Resolve the weighting/replication arguments from an optional lsa_design().
+# When `design` is supplied it provides all four; otherwise the individual
+# arguments are returned unchanged.
+.apply_design <- function(design, weight, repweights, rep_method, fay) {
+  if (is.null(design)) {
+    return(list(weight = weight, repweights = repweights,
+                rep_method = rep_method, fay = fay))
+  }
+  if (!inherits(design, "lsa_design")) {
+    stop("`design` must be created by lsa_design().", call. = FALSE)
+  }
+  list(weight = design$weight, repweights = design$repweights,
+       rep_method = match.arg(design$rep_method, c("BRR", "JK2", "JK1")),
+       fay = design$fay)
+}
