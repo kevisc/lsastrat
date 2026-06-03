@@ -9,6 +9,9 @@ General estimation, a shared design object, and tidyverse integration.
 * All estimators now accept a `design =` argument -- an [lsa_design()] object
   bundling `weight`, `repweights`, `rep_method` and `fay` -- so those
   arguments need not be repeated on every call.
+* `lsa_trend()`: compare a quantity across assessment cycles and report the
+  change from baseline with the linking (equating) error folded into the
+  standard error.
 * `tidy()` and `glance()` methods (via the `generics` package) for
   broom/tidyverse integration.
 
