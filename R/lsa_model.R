@@ -107,9 +107,8 @@ lsa_model <- function(data,
     pt <- if (j == 1L) point1 else .lsa_model_fit(forms[[j]], d, wf, fitter, coefs, extra)
     est_mat[, j] <- pt[terms]
     if (design_based) {
-      reps <- vapply(rws, function(w)
-        .lsa_model_fit(forms[[j]], d, w, fitter, coefs, extra)[terms],
-        numeric(length(terms)))
+      reps <- .rep_apply(rws, function(w)
+        .lsa_model_fit(forms[[j]], d, w, fitter, coefs, extra)[terms])
       var_mat[, j] <- cfac * rowSums((reps - pt[terms])^2)
     }
   }

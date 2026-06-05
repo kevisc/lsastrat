@@ -13,5 +13,11 @@
 #' (measurement) variance. The two are combined with Rubin's rules. See
 #' [pool_pv()].
 #'
+#' @section Parallel processing:
+#' The replicate-weight refits -- the dominant cost on large data -- can be run
+#' in parallel by setting `options(lsastrat.cores = n)`. This forks across `n`
+#' cores on Unix/macOS (via [parallel::mclapply()]); on Windows it falls back
+#' to sequential. Results are deterministic and do not depend on the core count.
+#'
 #' @keywords internal
 "_PACKAGE"

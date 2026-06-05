@@ -183,6 +183,31 @@ Every result has a `plot()` method, and an `autoplot()` method when ggplot2 is
 installed (e.g. `autoplot(by_imm, term = "slope")` for a forest plot, or
 `autoplot(mv)` for the specification curve).
 
+## Beyond the built-in estimators
+
+`lsa_model()` fits *any* model to a plausible-value outcome with
+replicate-weight inference -- a multiple regression, a logistic model, or a
+multilevel model -- pooling over plausible values exactly as the built-in
+estimators do. Supply a one-sided formula; the outcome is filled in from each
+plausible value.
+
+```{r lsa-model}
+lsa_model(pisa_mini, ~ ESCS + IMMIG + female, achievement = math, design = des)
+```
+
+`lsa_trend()` compares a quantity across assessment cycles and folds the
+linking (equating) error into the standard error of the change:
+
+```{r lsa-trend}
+half <- nrow(pisa_mini) %/% 2
+c1 <- social_gradient(pisa_mini[1:half, ], math, "ESCS", design = des)
+c2 <- social_gradient(pisa_mini[-(1:half), ], math, "ESCS", design = des)
+lsa_trend(list("2018" = c1, "2022" = c2), term = "slope", link_error = 3.5)
+```
+
+On large data the replicate-weight refits can be run in parallel with
+`options(lsastrat.cores = 4)` (Unix/macOS).
+
 ## Where it fits
 
 `lsastrat` complements rather than replaces general LSA packages such as

@@ -108,7 +108,9 @@ ieop <- function(data,
   wf <- wfull[mask]
   rws <- if (design_based) lapply(repweights, function(r) data[[r]][mask]) else NULL
 
-  rhs <- paste(circumstances, collapse = " + ")
+  # circumstance model matrix is constant across PVs and replicates
+  mm <- stats::model.matrix(stats::reformulate(circumstances), d)
+  ys <- lapply(achievement, function(a) d[[a]])
   m <- length(achievement)
   est_mat <- matrix(NA_real_, length(statistics), m,
                     dimnames = list(statistics, NULL))
@@ -117,8 +119,7 @@ ieop <- function(data,
 
   warned <- FALSE
   for (j in seq_len(m)) {
-    form <- stats::as.formula(paste(achievement[j], "~", rhs))
-    point <- .ieop_fit(form, d, wf, statistics)
+    point <- .ieop_fit(ys[[j]], mm, wf, statistics)
     est_mat[, j] <- point[statistics]
     if (!warned) {
       k <- attr(point, "rank") - 1L
@@ -131,8 +132,8 @@ ieop <- function(data,
       warned <- TRUE
     }
     if (design_based) {
-      reps <- vapply(rws, function(w) .ieop_fit(form, d, w, statistics)[statistics],
-                     numeric(length(statistics)))
+      reps <- .rep_apply(rws, function(w)
+        .ieop_fit(ys[[j]], mm, w, statistics)[statistics])
       var_mat[, j] <- cfac * rowSums((reps - point[statistics])^2)
     }
   }
@@ -170,15 +171,13 @@ ieop <- function(data,
   )
 }
 
-# One weighted fit on the masked sample: raw relative IOp (= Var(fitted) /
-# Var(y) = R^2), the df-adjusted relative IOp, absolute IOp (Var of fitted),
-# and total achievement variance. Carries rank and effective n as attributes.
-.ieop_fit <- function(form, data, w, statistics) {
-  vars <- all.vars(form)
-  y <- data[[vars[1L]]]
-  environment(form) <- environment()
-  fit <- stats::lm(form, data = data, weights = w)
-  yhat <- stats::fitted(fit)
+# One weighted fit on a precomputed model matrix: raw relative IOp
+# (= Var(fitted) / Var(y) = R^2), the df-adjusted relative IOp, absolute IOp
+# (Var of fitted), and total achievement variance. Carries rank and effective
+# n as attributes. Uses lm.wfit so the model matrix is built only once.
+.ieop_fit <- function(y, mm, w, statistics) {
+  fit <- stats::lm.wfit(mm, y, w)
+  yhat <- fit$fitted.values
 
   v_tot <- .wvar(y, w)
   v_exp <- .wvar(yhat, w)

@@ -49,3 +49,18 @@
        rep_method = match.arg(design$rep_method, c("BRR", "JK2", "JK1")),
        fay = design$fay)
 }
+
+# Apply FUN (returning a named numeric vector) over the replicate weights,
+# optionally in parallel. Set `options(lsastrat.cores = n)` to fork across n
+# cores (Unix only; Windows falls back to sequential). The replicate fits are
+# deterministic given the weights, so results do not depend on the core count.
+# Returns a matrix with one column per replicate (rows = the FUN's names).
+.rep_apply <- function(x, FUN) {
+  cores <- getOption("lsastrat.cores", 1L)
+  res <- if (is.numeric(cores) && cores > 1L && .Platform$OS.type == "unix") {
+    parallel::mclapply(x, FUN, mc.cores = as.integer(cores))
+  } else {
+    lapply(x, FUN)
+  }
+  do.call(cbind, res)
+}

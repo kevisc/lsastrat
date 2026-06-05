@@ -21,6 +21,14 @@ variance (design-based); the spread \emph{across} PVs gives the \emph{imputation
 \code{\link[=pool_pv]{pool_pv()}}.
 }
 
+\section{Parallel processing}{
+
+The replicate-weight refits -- the dominant cost on large data -- can be run
+in parallel by setting \code{options(lsastrat.cores = n)}. This forks across \code{n}
+cores on Unix/macOS (via \code{\link[parallel:mclapply]{parallel::mclapply()}}); on Windows it falls back
+to sequential. Results are deterministic and do not depend on the core count.
+}
+
 \seealso{
 Useful links:
 \itemize{

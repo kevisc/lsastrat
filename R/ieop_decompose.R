@@ -81,16 +81,25 @@ ieop_decompose <- function(data,
   ys <- lapply(achievement, function(a) data[[a]][mask])
   rws <- if (design_based) lapply(repweights, function(r) data[[r]][mask]) else NULL
 
+  # precompute the model matrix for every circumstance subset (constant across
+  # PVs and replicates) so the Shapley loop only refits via lm.wfit
+  bits <- 2^(seq_len(k) - 1L)
+  mms <- vector("list", 2^k)
+  for (msk in seq_len(2^k - 1L)) {
+    vars <- circumstances[bitwAnd(msk, bits) > 0]
+    mms[[msk + 1L]] <- stats::model.matrix(stats::reformulate(vars), dsub)
+  }
+
   m <- length(achievement)
   est_mat <- matrix(NA_real_, k, m, dimnames = list(circumstances, NULL))
   var_mat <- matrix(0, k, m, dimnames = list(circumstances, NULL))
 
   for (j in seq_along(ys)) {
-    point <- .shapley_iop(ys[[j]], dsub, circumstances, wf)
+    point <- .shapley_iop(ys[[j]], mms, wf, circumstances)
     est_mat[, j] <- point
     if (design_based) {
-      reps <- vapply(rws, function(w) .shapley_iop(ys[[j]], dsub, circumstances, w),
-                     numeric(k))
+      reps <- .rep_apply(rws, function(w)
+        .shapley_iop(ys[[j]], mms, w, circumstances))
       var_mat[, j] <- cfac * rowSums((reps - point)^2)
     }
   }
@@ -125,23 +134,19 @@ ieop_decompose <- function(data,
   )
 }
 
-# Shapley contributions of each circumstance to the weighted R^2, on an
-# already-masked sample. Fits one weighted regression per subset (2^k).
-.shapley_iop <- function(y, dsub, circumstances, w) {
-  k <- length(circumstances)
+# Shapley contributions of each circumstance to the weighted R^2, using
+# precomputed per-subset model matrices (`mms`, indexed by bitmask + 1; entry
+# 1 is the empty model, R^2 = 0). Refits each subset via lm.wfit.
+.shapley_iop <- function(y, mms, w, terms) {
+  k <- length(terms)
   v_tot <- .wvar(y, w)
   bits <- 2^(seq_len(k) - 1L)
 
   # R^2 for every subset (indexed by bitmask)
   r2 <- numeric(2^k)
-  d2 <- dsub
-  d2$.y_ <- y
   for (mask in seq_len(2^k - 1L)) {
-    vars <- circumstances[bitwAnd(mask, bits) > 0]
-    form <- stats::reformulate(vars, response = ".y_")
-    environment(form) <- environment()
-    fit <- stats::lm(form, data = d2, weights = w)
-    r2[mask + 1L] <- if (v_tot > 0) .wvar(stats::fitted(fit), w) / v_tot else NA_real_
+    f <- stats::lm.wfit(mms[[mask + 1L]], y, w)
+    r2[mask + 1L] <- if (v_tot > 0) .wvar(f$fitted.values, w) / v_tot else NA_real_
   }
 
   # Shapley weights by subset size, then average marginal contribution
@@ -159,5 +164,5 @@ ieop_decompose <- function(data,
       }
     }
   }
-  stats::setNames(contrib, circumstances)
+  stats::setNames(contrib, terms)
 }

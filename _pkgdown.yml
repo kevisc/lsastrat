@@ -11,6 +11,11 @@ reference:
   - segregation_index
   - ieop
   - variance_decomposition
+- title: General modelling
+  desc: Fit arbitrary models, and compare across cycles.
+  contents:
+  - lsa_model
+  - lsa_trend
 - title: Decompositions
   desc: Attributing inequality to its sources.
   contents:
@@ -32,12 +37,14 @@ reference:
   desc: Accessors and plots for fitted objects.
   contents:
   - lsastrat_estimate
+  - tidy.lsastrat_estimate
   - autoplot.lsastrat
   - plot.social_gradient
   - plot.segregation
   - plot.lsastrat_by
   - plot.equity_scatter
   - plot.lsa_multiverse
+  - plot.lsa_trend
 - title: Data
   contents:
   - pisa_mini

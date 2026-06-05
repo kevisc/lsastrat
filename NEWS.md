@@ -14,6 +14,13 @@ General estimation, a shared design object, and tidyverse integration.
   standard error.
 * `tidy()` and `glance()` methods (via the `generics` package) for
   broom/tidyverse integration.
+* Performance: `social_gradient()`, `ieop()` and `ieop_decompose()` now reuse a
+  precomputed model matrix across plausible values and replicate weights
+  (`lm.wfit`), giving identical results several times faster on large data
+  (the Shapley decomposition is ~3x faster).
+* Parallel processing: set `options(lsastrat.cores = n)` to run the
+  replicate-weight refits across `n` cores (Unix/macOS; sequential fallback on
+  Windows). Results are identical regardless of the core count.
 
 # lsastrat 0.2.0
 

@@ -202,9 +202,8 @@ segregation_index <- function(data,
     } else {
       est_mat[, p] <- point[indices]
       if (variance == "replicate") {
-        reps <- vapply(repweights, function(rw)
-          .seg_indices(.seg_table(unit_v, g, data[[rw]][mask]), indices, minority)[indices],
-          numeric(length(indices)))
+        reps <- .rep_apply(repweights, function(rw)
+          .seg_indices(.seg_table(unit_v, g, data[[rw]][mask]), indices, minority)[indices])
         if (any(!is.finite(reps))) {
           affected <- indices[apply(!is.finite(reps), 1L, any)]
           warning("Index/indices ", paste(affected, collapse = ", "),

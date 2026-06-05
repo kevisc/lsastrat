@@ -42,7 +42,10 @@ Shapley decomposition of inequality of opportunity, Oaxaca–Blinder gap
 decomposition), **compares** them across countries/subgroups (`lsa_by()`,
 `equity_scatter()`), and runs PV/weight-aware **specification-curve
 (multiverse)** analyses (`lsa_multiverse()`), with base and `ggplot2`
-(`autoplot()`) graphics throughout.
+(`autoplot()`) graphics throughout. For models beyond the built-in estimators,
+`lsa_model()` fits **any** model (`lm`, `glm`, multilevel `lme4::lmer`) to
+plausible-value outcomes with replicate-weight inference, and `lsa_trend()`
+compares a quantity across assessment cycles with the linking error folded in.
 
 General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`, OECD's
 `Rrepest`) handle plausible values and replicate weights but expose only

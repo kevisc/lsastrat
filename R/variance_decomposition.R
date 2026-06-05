@@ -85,8 +85,8 @@ variance_decomposition <- function(data,
     point <- .vardecomp_fit(ys[[j]], unit_v, wf)
     est_mat[, j] <- point[statistics]
     if (design_based) {
-      reps <- vapply(rws, function(w) .vardecomp_fit(ys[[j]], unit_v, w)[statistics],
-                     numeric(length(statistics)))
+      reps <- .rep_apply(rws, function(w)
+        .vardecomp_fit(ys[[j]], unit_v, w)[statistics])
       var_mat[, j] <- cfac * rowSums((reps - point[statistics])^2)
     }
   }

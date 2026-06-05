@@ -111,12 +111,17 @@ social_gradient <- function(data,
   var_mat <- matrix(0, length(params), length(achievement),
                     dimnames = list(params, NULL))
 
+  # The model matrices are constant across plausible values and replicates
+  # (only y and the weights change), so build them once and refit via lm.wfit.
+  mm1 <- cbind(`(Intercept)` = 1, x = x)
+  mm2 <- if (curvature) cbind(`(Intercept)` = 1, x = x, x2 = x^2) else NULL
+
   for (j in seq_along(ys)) {
-    point <- .gradient_fit(ys[[j]], x, wfull, curvature)
+    point <- .gradient_fit(ys[[j]], mm1, mm2, wfull, curvature)
     est_mat[, j] <- point[params]
     if (design_based) {
-      reps <- vapply(rws, function(w) .gradient_fit(ys[[j]], x, w, curvature)[params],
-                     numeric(length(params)))
+      reps <- .rep_apply(rws, function(w)
+        .gradient_fit(ys[[j]], mm1, mm2, w, curvature)[params])
       var_mat[, j] <- cfac * rowSums((reps - point[params])^2)
     }
   }
@@ -158,22 +163,23 @@ social_gradient <- function(data,
   )
 }
 
-# Single weighted fit on an already-masked sample: slope and strength
+# Single weighted fit on precomputed model matrices: slope and strength
 # (R^2 * 100) from the LINEAR model (OECD definition), plus the curvature
-# coefficient from the QUADRATIC model when requested.
-.gradient_fit <- function(y, x, w, curvature) {
-  fit <- stats::lm(y ~ x, weights = w)
-  slope <- unname(stats::coef(fit)[["x"]])
+# coefficient from the QUADRATIC model when requested. Uses lm.wfit so the
+# model matrix is not rebuilt on every replicate.
+.gradient_fit <- function(y, mm1, mm2, w, curvature) {
+  f1 <- stats::lm.wfit(mm1, y, w)
+  slope <- unname(f1$coefficients[["x"]])
 
   mu <- stats::weighted.mean(y, w)
   ss_tot <- sum(w * (y - mu)^2)
-  ss_res <- sum(w * stats::residuals(fit)^2)
+  ss_res <- sum(w * f1$residuals^2)
   r2 <- if (ss_tot > 0) 1 - ss_res / ss_tot else NA_real_
 
   out <- c(slope = slope, strength = r2 * 100)
   if (curvature) {
-    fit2 <- stats::lm(y ~ x + I(x^2), weights = w)
-    out[["curvature"]] <- unname(stats::coef(fit2)[["I(x^2)"]])
+    f2 <- stats::lm.wfit(mm2, y, w)
+    out[["curvature"]] <- unname(f2$coefficients[["x2"]])
   }
   out
 }

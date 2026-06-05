@@ -117,9 +117,8 @@ oaxaca_gap <- function(data,
     point <- .oaxaca_fit(ys[[j]], gvec, mm, wf, groups[1], groups[2], type)
     est_mat[, j] <- point[params]
     if (design_based) {
-      reps <- vapply(rws, function(w)
-        .oaxaca_fit(ys[[j]], gvec, mm, w, groups[1], groups[2], type)[params],
-        numeric(length(params)))
+      reps <- .rep_apply(rws, function(w)
+        .oaxaca_fit(ys[[j]], gvec, mm, w, groups[1], groups[2], type)[params])
       var_mat[, j] <- cfac * rowSums((reps - point[params])^2)
     }
   }
