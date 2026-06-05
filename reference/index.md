@@ -13,6 +13,16 @@ First-class stratification and inequality quantities.
 - [`variance_decomposition()`](https://kevisc.github.io/lsastrat/reference/variance_decomposition.md)
   : Between- and within-school variance decomposition
 
+## General modelling
+
+Fit arbitrary models, and compare across cycles.
+
+- [`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+  : Fit any model to plausible-value outcomes with replicate-weight
+  inference
+- [`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+  : Trend across assessment cycles with linking error
+
 ## Decompositions
 
 Attributing inequality to its sources.
@@ -56,6 +66,9 @@ Accessors and plots for fitted objects.
   [`confint(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
   [`as.data.frame(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
   : Methods for lsastrat estimate objects
+- [`tidy()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+  [`glance()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+  : Tidy an lsastrat estimate
 - [`autoplot(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
   [`autoplot(`*`<social_gradient>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
   [`autoplot(`*`<lsastrat_by>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
@@ -72,6 +85,8 @@ Accessors and plots for fitted objects.
   : Plot a quality-equity scatter
 - [`plot(`*`<lsa_multiverse>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsa_multiverse.md)
   : Specification-curve plot
+- [`plot(`*`<lsa_trend>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsa_trend.md)
+  : Plot a cross-cycle trend
 
 ## Data
 

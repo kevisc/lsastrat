@@ -22,6 +22,7 @@ segregation_index(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
+  design = NULL,
   variance = c("replicate", "bootstrap", "none"),
   n_boot = 200L,
   debias = TRUE,
@@ -84,6 +85,13 @@ segregation_index(
 
   Replication design and Fay factor; see
   [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+
+- design:
+
+  Optional
+  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
+  it overrides those arguments.
 
 - variance:
 

@@ -18,7 +18,8 @@ equity_scatter(
   weight = NULL,
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
-  fay = 0.5
+  fay = 0.5,
+  design = NULL
 )
 ```
 
@@ -48,6 +49,13 @@ equity_scatter(
 
   Replicate-weight specification passed to
   [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md).
+
+- design:
+
+  Optional
+  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
+  it overrides those arguments.
 
 ## Value
 

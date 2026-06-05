@@ -14,6 +14,15 @@ variance (design-based); the spread *across* PVs gives the *imputation*
 (measurement) variance. The two are combined with Rubin's rules. See
 [`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md).
 
+## Parallel processing
+
+The replicate-weight refits – the dominant cost on large data – can be
+run in parallel by setting `options(lsastrat.cores = n)`. This forks
+across `n` cores on Unix/macOS (via
+[`parallel::mclapply()`](https://rdrr.io/r/parallel/mclapply.html)); on
+Windows it falls back to sequential. Results are deterministic and do
+not depend on the core count.
+
 ## See also
 
 Useful links:

@@ -1,5 +1,37 @@
 # Changelog
 
+## lsastrat 0.3.0
+
+General estimation, a shared design object, and tidyverse integration.
+
+- [`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md):
+  fit **any** model (`lm`, `glm`, multilevel via `lme4::lmer`, …) to
+  plausible-value outcomes, with replicate-weight variance and Rubin
+  pooling. Lifts the package beyond the built-in estimators and beyond
+  the OLS-only support of comparable tools.
+- All estimators now accept a `design =` argument – an \[lsa_design()\]
+  object bundling `weight`, `repweights`, `rep_method` and `fay` – so
+  those arguments need not be repeated on every call.
+- [`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md):
+  compare a quantity across assessment cycles and report the change from
+  baseline with the linking (equating) error folded into the standard
+  error.
+- [`tidy()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+  and
+  [`glance()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+  methods (via the `generics` package) for broom/tidyverse integration.
+- Performance:
+  [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md),
+  [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) and
+  [`ieop_decompose()`](https://kevisc.github.io/lsastrat/reference/ieop_decompose.md)
+  now reuse a precomputed model matrix across plausible values and
+  replicate weights (`lm.wfit`), giving identical results several times
+  faster on large data (the Shapley decomposition is ~3x faster).
+- Parallel processing: set `options(lsastrat.cores = n)` to run the
+  replicate-weight refits across `n` cores (Unix/macOS; sequential
+  fallback on Windows). Results are identical regardless of the core
+  count.
+
 ## lsastrat 0.2.0
 
 Comparative analysis, decompositions, a multiverse engine, and ggplot2

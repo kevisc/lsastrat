@@ -21,6 +21,7 @@ oaxaca_gap(
   repweights = NULL,
   rep_method = c("BRR", "JK2", "JK1"),
   fay = 0.5,
+  design = NULL,
   type = c("twofold", "threefold"),
   level = 0.95
 )
@@ -63,6 +64,13 @@ oaxaca_gap(
 
   Replication design and Fay factor; see
   [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+
+- design:
+
+  Optional
+  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
+  it overrides those arguments.
 
 - type:
 

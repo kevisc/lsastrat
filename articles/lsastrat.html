@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -331,6 +331,48 @@ Bundle the design once with <code><a href="../reference/lsa_design.html">lsa_des
 <code>autoplot()</code> method when ggplot2 is installed
 (e.g. <code>autoplot(by_imm, term = "slope")</code> for a forest plot,
 or <code>autoplot(mv)</code> for the specification curve).</p>
+</div>
+<div class="section level2">
+<h2 id="beyond-the-built-in-estimators">Beyond the built-in estimators<a class="anchor" aria-label="anchor" href="#beyond-the-built-in-estimators"></a>
+</h2>
+<p><code><a href="../reference/lsa_model.html">lsa_model()</a></code> fits <em>any</em> model to a plausible-value
+outcome with replicate-weight inference – a multiple regression, a
+logistic model, or a multilevel model – pooling over plausible values
+exactly as the built-in estimators do. Supply a one-sided formula; the
+outcome is filled in from each plausible value.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/lsa_model.html">lsa_model</a></span><span class="op">(</span><span class="va">pisa_mini</span>, <span class="op">~</span> <span class="va">ESCS</span> <span class="op">+</span> <span class="va">IMMIG</span> <span class="op">+</span> <span class="va">female</span>, achievement <span class="op">=</span> <span class="va">math</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Model: stats::lm(&lt;PV&gt; ~ ESCS + IMMIG + female)</span></span>
+<span><span class="co">#&gt;   10 plausible value(s)  |  n = 2048</span></span>
+<span><span class="co">#&gt;   Variance: BRR, 64 replicate weights (+ PV imputation); t reference</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                 Estimate Std.Error      t    df       p</span></span>
+<span><span class="co">#&gt; (Intercept)      500.857     2.876 174.15 906.1 0.0e+00</span></span>
+<span><span class="co">#&gt; ESCS              40.659     1.867  21.78 379.4 8.2e-69</span></span>
+<span><span class="co">#&gt; IMMIGsecond_gen   -9.437     4.284  -2.20 223.0 2.9e-02</span></span>
+<span><span class="co">#&gt; IMMIGfirst_gen    -3.537     9.344  -0.38 470.4 7.1e-01</span></span>
+<span><span class="co">#&gt; female            -9.770     4.599  -2.12 279.3 3.5e-02</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; fitter = stats::lm</span></span></code></pre></div>
+<p><code><a href="../reference/lsa_trend.html">lsa_trend()</a></code> compares a quantity across assessment cycles
+and folds the linking (equating) error into the standard error of the
+change:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">half</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pisa_mini</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="fl">2</span></span>
+<span><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/social_gradient.html">social_gradient</a></span><span class="op">(</span><span class="va">pisa_mini</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">half</span>, <span class="op">]</span>, <span class="va">math</span>, <span class="st">"ESCS"</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span>
+<span><span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/social_gradient.html">social_gradient</a></span><span class="op">(</span><span class="va">pisa_mini</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">half</span><span class="op">)</span>, <span class="op">]</span>, <span class="va">math</span>, <span class="st">"ESCS"</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/lsa_trend.html">lsa_trend</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"2018"</span> <span class="op">=</span> <span class="va">c1</span>, <span class="st">"2022"</span> <span class="op">=</span> <span class="va">c2</span><span class="op">)</span>, term <span class="op">=</span> <span class="st">"slope"</span>, link_error <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Trend in `slope` (social_gradient) across 2 cycles; baseline = 2018</span></span>
+<span><span class="co">#&gt;   linking error: 3.5 (added to each change SE)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  cycle estimate    se change change.se    z    p</span></span>
+<span><span class="co">#&gt;   2018   41.308 2.874  0.000        NA   NA   NA</span></span>
+<span><span class="co">#&gt;   2022   41.454 2.426  0.146     5.137 0.03 0.98</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; change = estimate - baseline; SE includes the linking error</span></span></code></pre></div>
+<p>On large data the replicate-weight refits can be run in parallel with
+<code>options(lsastrat.cores = 4)</code> (Unix/macOS).</p>
 </div>
 <div class="section level2">
 <h2 id="where-it-fits">Where it fits<a class="anchor" aria-label="anchor" href="#where-it-fits"></a>

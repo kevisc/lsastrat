@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,19 @@
       <small>Source: <a href="https://github.com/kevisc/lsastrat/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="lsastrat-030">lsastrat 0.3.0<a class="anchor" aria-label="anchor" href="#lsastrat-030"></a></h2>
+<p>General estimation, a shared design object, and tidyverse integration.</p>
+<ul><li>
+<code><a href="../reference/lsa_model.html">lsa_model()</a></code>: fit <strong>any</strong> model (<code>lm</code>, <code>glm</code>, multilevel via <code>lme4::lmer</code>, …) to plausible-value outcomes, with replicate-weight variance and Rubin pooling. Lifts the package beyond the built-in estimators and beyond the OLS-only support of comparable tools.</li>
+<li>All estimators now accept a <code>design =</code> argument – an [lsa_design()] object bundling <code>weight</code>, <code>repweights</code>, <code>rep_method</code> and <code>fay</code> – so those arguments need not be repeated on every call.</li>
+<li>
+<code><a href="../reference/lsa_trend.html">lsa_trend()</a></code>: compare a quantity across assessment cycles and report the change from baseline with the linking (equating) error folded into the standard error.</li>
+<li>
+<code><a href="../reference/tidy.lsastrat_estimate.html">tidy()</a></code> and <code><a href="../reference/tidy.lsastrat_estimate.html">glance()</a></code> methods (via the <code>generics</code> package) for broom/tidyverse integration.</li>
+<li>Performance: <code><a href="../reference/social_gradient.html">social_gradient()</a></code>, <code><a href="../reference/ieop.html">ieop()</a></code> and <code><a href="../reference/ieop_decompose.html">ieop_decompose()</a></code> now reuse a precomputed model matrix across plausible values and replicate weights (<code>lm.wfit</code>), giving identical results several times faster on large data (the Shapley decomposition is ~3x faster).</li>
+<li>Parallel processing: set <code>options(lsastrat.cores = n)</code> to run the replicate-weight refits across <code>n</code> cores (Unix/macOS; sequential fallback on Windows). Results are identical regardless of the core count.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="lsastrat-020">lsastrat 0.2.0<a class="anchor" aria-label="anchor" href="#lsastrat-020"></a></h2>
 <p>Comparative analysis, decompositions, a multiverse engine, and ggplot2 support.</p>

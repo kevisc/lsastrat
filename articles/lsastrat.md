@@ -309,6 +309,56 @@ Every result has a
 (e.g. `autoplot(by_imm, term = "slope")` for a forest plot, or
 `autoplot(mv)` for the specification curve).
 
+## Beyond the built-in estimators
+
+[`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+fits *any* model to a plausible-value outcome with replicate-weight
+inference – a multiple regression, a logistic model, or a multilevel
+model – pooling over plausible values exactly as the built-in estimators
+do. Supply a one-sided formula; the outcome is filled in from each
+plausible value.
+
+``` r
+
+lsa_model(pisa_mini, ~ ESCS + IMMIG + female, achievement = math, design = des)
+#> Model: stats::lm(<PV> ~ ESCS + IMMIG + female)
+#>   10 plausible value(s)  |  n = 2048
+#>   Variance: BRR, 64 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>                 Estimate Std.Error      t    df       p
+#> (Intercept)      500.857     2.876 174.15 906.1 0.0e+00
+#> ESCS              40.659     1.867  21.78 379.4 8.2e-69
+#> IMMIGsecond_gen   -9.437     4.284  -2.20 223.0 2.9e-02
+#> IMMIGfirst_gen    -3.537     9.344  -0.38 470.4 7.1e-01
+#> female            -9.770     4.599  -2.12 279.3 3.5e-02
+#> 
+#> fitter = stats::lm
+```
+
+[`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+compares a quantity across assessment cycles and folds the linking
+(equating) error into the standard error of the change:
+
+``` r
+
+half <- nrow(pisa_mini) %/% 2
+c1 <- social_gradient(pisa_mini[1:half, ], math, "ESCS", design = des)
+c2 <- social_gradient(pisa_mini[-(1:half), ], math, "ESCS", design = des)
+lsa_trend(list("2018" = c1, "2022" = c2), term = "slope", link_error = 3.5)
+#> Trend in `slope` (social_gradient) across 2 cycles; baseline = 2018
+#>   linking error: 3.5 (added to each change SE)
+#> 
+#>  cycle estimate    se change change.se    z    p
+#>   2018   41.308 2.874  0.000        NA   NA   NA
+#>   2022   41.454 2.426  0.146     5.137 0.03 0.98
+#> 
+#> change = estimate - baseline; SE includes the linking error
+```
+
+On large data the replicate-weight refits can be run in parallel with
+`options(lsastrat.cores = 4)` (Unix/macOS).
+
 ## Where it fits
 
 `lsastrat` complements rather than replaces general LSA packages such as

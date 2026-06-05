@@ -26,7 +26,14 @@ decomposition), **compares** them across countries/subgroups
 [`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)),
 and runs PV/weight-aware **specification-curve (multiverse)** analyses
 ([`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)),
-with base and `ggplot2` (`autoplot()`) graphics throughout.
+with base and `ggplot2` (`autoplot()`) graphics throughout. For models
+beyond the built-in estimators,
+[`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+fits **any** model (`lm`, `glm`, multilevel `lme4::lmer`) to
+plausible-value outcomes with replicate-weight inference, and
+[`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+compares a quantity across assessment cycles with the linking error
+folded in.
 
 General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`,
 OECD’s `Rrepest`) handle plausible values and replicate weights but

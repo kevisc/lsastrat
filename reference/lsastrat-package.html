@@ -13,7 +13,7 @@ estimation."><meta property="og:image" content="https://kevisc.github.io/lsastra
 
     <a class="navbar-brand me-2" href="../index.html">lsastrat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,6 +57,15 @@ set of replicate weights. The replicate weights give the <em>sampling</em>
 variance (design-based); the spread <em>across</em> PVs gives the <em>imputation</em>
 (measurement) variance. The two are combined with Rubin's rules. See
 <code><a href="pool_pv.html">pool_pv()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="parallel-processing">Parallel processing<a class="anchor" aria-label="anchor" href="#parallel-processing"></a></h2>
+
+
+<p>The replicate-weight refits – the dominant cost on large data – can be run
+in parallel by setting <code>options(lsastrat.cores = n)</code>. This forks across <code>n</code>
+cores on Unix/macOS (via <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply()</a></code>); on Windows it falls back
+to sequential. Results are deterministic and do not depend on the core count.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
