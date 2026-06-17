@@ -25,6 +25,34 @@ Inference uses a *t* reference with Rubin degrees of freedom (not the
 normal), which matters because LSA studies provide only 5 or 10
 plausible values.
 
+## What this replaces
+
+Consider the standard workflow for one of the most-reported quantities
+in educational stratification, the ESCS gradient for a set of countries.
+Done by hand it means: for each country, fit 10 plausible values x 81
+weights = 810 weighted regressions, pool the slopes with Rubin’s rules,
+derive the strength from the pooled R-squared, and keep track of the Fay
+factor – then repeat for every country, and again for every robustness
+variant. General LSA packages (`intsvy`, `EdSurvey`, `Rrepest`) automate
+the *regression* but still leave the gradient, segregation indices,
+opportunity decompositions and their correct inference to be assembled
+manually, and none applies the finite-sample bias correction the
+segregation literature calls for. In `lsastrat` each of these is one
+call returning a labelled estimate with design-correct uncertainty:
+
+``` r
+
+lsa_by(stu, by = "CNT", estimator = social_gradient,
+       achievement = paste0("PV", 1:10, "MATH"), escs = "ESCS", design = des)
+```
+
+and
+[`tidy()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+turns any result into a publication table, `autoplot()` into a figure,
+and
+[`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+into a robustness analysis.
+
 All examples use `pisa_mini`, a **fully simulated** PISA-like data set
 bundled with the package (it is *not* real PISA data). It has 10
 plausible values each for mathematics and reading

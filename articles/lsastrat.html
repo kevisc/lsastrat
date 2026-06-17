@@ -89,6 +89,30 @@ bootstrap.</li>
 <p>Inference uses a <em>t</em> reference with Rubin degrees of freedom
 (not the normal), which matters because LSA studies provide only 5 or 10
 plausible values.</p>
+</div>
+<div class="section level2">
+<h2 id="what-this-replaces">What this replaces<a class="anchor" aria-label="anchor" href="#what-this-replaces"></a>
+</h2>
+<p>Consider the standard workflow for one of the most-reported
+quantities in educational stratification, the ESCS gradient for a set of
+countries. Done by hand it means: for each country, fit 10 plausible
+values x 81 weights = 810 weighted regressions, pool the slopes with
+Rubin’s rules, derive the strength from the pooled R-squared, and keep
+track of the Fay factor – then repeat for every country, and again for
+every robustness variant. General LSA packages (<code>intsvy</code>,
+<code>EdSurvey</code>, <code>Rrepest</code>) automate the
+<em>regression</em> but still leave the gradient, segregation indices,
+opportunity decompositions and their correct inference to be assembled
+manually, and none applies the finite-sample bias correction the
+segregation literature calls for. In <code>lsastrat</code> each of these
+is one call returning a labelled estimate with design-correct
+uncertainty:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/lsa_by.html">lsa_by</a></span><span class="op">(</span><span class="va">stu</span>, by <span class="op">=</span> <span class="st">"CNT"</span>, estimator <span class="op">=</span> <span class="va">social_gradient</span>,</span>
+<span>       achievement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"PV"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="st">"MATH"</span><span class="op">)</span>, escs <span class="op">=</span> <span class="st">"ESCS"</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span></code></pre></div>
+<p>and <code><a href="../reference/tidy.lsastrat_estimate.html">tidy()</a></code> turns any result into a publication table,
+<code>autoplot()</code> into a figure, and <code><a href="../reference/lsa_multiverse.html">lsa_multiverse()</a></code>
+into a robustness analysis.</p>
 <p>All examples use <code>pisa_mini</code>, a <strong>fully
 simulated</strong> PISA-like data set bundled with the package (it is
 <em>not</em> real PISA data). It has 10 plausible values each for
@@ -96,7 +120,7 @@ mathematics and reading (<code>PV1MATH</code>…<code>PV10MATH</code>), a
 final weight (<code>W_FSTUWT</code>), 64 Fay BRR replicate weights
 (<code>W_FSTURWT1</code>…<code>W_FSTURWT64</code>), and background
 variables.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"W_FSTURWT"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">64</span><span class="op">)</span></span>
 <span><span class="va">math</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"PV"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="st">"MATH"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -108,7 +132,7 @@ variables.</p>
 socio-economic index (ESCS), the <strong>strength</strong> is the
 percentage of achievement variance it explains (R² × 100), and
 <strong>curvature</strong> is an optional quadratic term.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/social_gradient.html">social_gradient</a></span><span class="op">(</span><span class="va">pisa_mini</span>, achievement <span class="op">=</span> <span class="va">math</span>, escs <span class="op">=</span> <span class="st">"ESCS"</span>,</span>
 <span>                     weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
 <span><span class="va">g</span></span>
@@ -124,7 +148,7 @@ percentage of achievement variance it explains (R² × 100), and
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; slope = score points per 1 unit of ESCS; strength = % variance explained (R^2 x 100)</span></span></code></pre></div>
 <p>The result behaves like a model object:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     slope  strength curvature </span></span>
 <span><span class="co">#&gt; 41.357302 20.188700  1.025083</span></span>
@@ -133,7 +157,7 @@ percentage of achievement variance it explains (R² × 100), and
 <span><span class="co">#&gt; slope     37.758539 44.956065</span></span>
 <span><span class="co">#&gt; strength  16.651036 23.726363</span></span>
 <span><span class="co">#&gt; curvature -2.113944  4.164111</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span></code></pre></div>
 <p><img src="lsastrat_files/figure-html/gradient-plot-1.png" class="r-plt" alt="" width="576"></p>
 </div>
@@ -143,7 +167,7 @@ percentage of achievement variance it explains (R² × 100), and
 <p><code><a href="../reference/segregation_index.html">segregation_index()</a></code> reports the family of indices used
 in stratification research. Pass a categorical <code>group</code> for
 <strong>social</strong> segregation:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segregation_index.html">segregation_index</a></span><span class="op">(</span><span class="va">pisa_mini</span>, unit <span class="op">=</span> <span class="st">"school_id"</span>, group <span class="op">=</span> <span class="st">"IMMIG"</span>,</span>
 <span>                  weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, variance <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>                  n_boot <span class="op">=</span> <span class="fl">99</span>, boot_seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -165,7 +189,7 @@ are small — exactly the LSA case. With
 estimates and removes that bias (<code>debias = TRUE</code>) and gives a
 design-correct standard error. With replicate weights you can instead
 use them directly (no bias correction):</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segregation_index.html">segregation_index</a></span><span class="op">(</span><span class="va">pisa_mini</span>, unit <span class="op">=</span> <span class="st">"school_id"</span>, group <span class="op">=</span> <span class="st">"IMMIG"</span>,</span>
 <span>                  weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span>,</span>
 <span>                  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="st">"H"</span>, <span class="st">"M"</span><span class="op">)</span><span class="op">)</span></span>
@@ -181,7 +205,7 @@ use them directly (no bias correction):</p>
 <p>For <strong>academic</strong> segregation, define the group by an
 achievement threshold; the index is then pooled across plausible
 values:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segregation_index.html">segregation_index</a></span><span class="op">(</span><span class="va">pisa_mini</span>, unit <span class="op">=</span> <span class="st">"school_id"</span>, achievement <span class="op">=</span> <span class="va">math</span>,</span>
 <span>                  cutoff <span class="op">=</span> <span class="fl">480</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="st">"H"</span><span class="op">)</span>,</span>
 <span>                  variance <span class="op">=</span> <span class="st">"bootstrap"</span>, n_boot <span class="op">=</span> <span class="fl">99</span>, boot_seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -201,7 +225,7 @@ values:</p>
 <p><code><a href="../reference/ieop.html">ieop()</a></code> implements the Ferreira–Gignoux (2014)
 decomposition: the share of achievement variance explained by
 pre-determined <strong>circumstances</strong>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ieop.html">ieop</a></span><span class="op">(</span><span class="va">pisa_mini</span>, achievement <span class="op">=</span> <span class="va">math</span>,</span>
 <span>     circumstances <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IMMIG"</span>, <span class="st">"parental_edu"</span>, <span class="st">"books"</span><span class="op">)</span>,</span>
 <span>     weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
@@ -232,7 +256,7 @@ achievement variance.</p>
 grouping variable and stacks the results into one comparable table – the
 workhorse for cross-country work. <code><a href="../reference/equity_scatter.html">equity_scatter()</a></code> draws
 the OECD quality-vs-equity scatter.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">by_imm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lsa_by.html">lsa_by</a></span><span class="op">(</span><span class="va">pisa_mini</span>, by <span class="op">=</span> <span class="st">"IMMIG"</span>, estimator <span class="op">=</span> <span class="va">social_gradient</span>,</span>
 <span>                 achievement <span class="op">=</span> <span class="va">math</span>, escs <span class="op">=</span> <span class="st">"ESCS"</span>, weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>,</span>
 <span>                 repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
@@ -256,7 +280,7 @@ the OECD quality-vs-equity scatter.</p>
 <p>Three decompositions break a quantity into interpretable parts. The
 between-school variance share (a strongly stratified system has a high
 value):</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/variance_decomposition.html">variance_decomposition</a></span><span class="op">(</span><span class="va">pisa_mini</span>, <span class="va">math</span>, unit <span class="op">=</span> <span class="st">"school_id"</span>,</span>
 <span>                       weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Between/within-unit variance decomposition</span></span>
@@ -273,7 +297,7 @@ value):</p>
 <span><span class="co">#&gt; icc = between-unit share of achievement variance</span></span></code></pre></div>
 <p>The Shapley decomposition attributes the inequality of opportunity to
 each circumstance (the contributions sum to the total relative IOp):</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ieop_decompose.html">ieop_decompose</a></span><span class="op">(</span><span class="va">pisa_mini</span>, <span class="va">math</span>,</span>
 <span>               circumstances <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IMMIG"</span>, <span class="st">"parental_edu"</span>, <span class="st">"books"</span><span class="op">)</span>,</span>
 <span>               weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
@@ -290,7 +314,7 @@ each circumstance (the contributions sum to the total relative IOp):</p>
 <span><span class="co">#&gt; Shapley contributions to relative IOp (R^2); they sum to the total</span></span></code></pre></div>
 <p>The Oaxaca-Blinder decomposition splits an achievement gap into an
 explained (composition) and an unexplained (structure) part:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="va">pisa_mini</span><span class="op">[</span><span class="va">pisa_mini</span><span class="op">$</span><span class="va">IMMIG</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"native"</span>, <span class="st">"first_gen"</span><span class="op">)</span>, <span class="op">]</span></span>
 <span><span class="va">d2</span><span class="op">$</span><span class="va">IMMIG</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">d2</span><span class="op">$</span><span class="va">IMMIG</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/oaxaca_gap.html">oaxaca_gap</a></span><span class="op">(</span><span class="va">d2</span>, <span class="va">math</span>, group <span class="op">=</span> <span class="st">"IMMIG"</span>,</span>
@@ -314,7 +338,7 @@ explained (composition) and an unexplained (structure) part:</p>
 <p><code><a href="../reference/lsa_multiverse.html">lsa_multiverse()</a></code> runs an estimator across a grid of
 analytic forking paths so you can read off how robust a finding is.
 Bundle the design once with <code><a href="../reference/lsa_design.html">lsa_design()</a></code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lsa_design.html">lsa_design</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="st">"W_FSTUWT"</span>, repweights <span class="op">=</span> <span class="va">reps</span><span class="op">)</span></span>
 <span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lsa_multiverse.html">lsa_multiverse</a></span><span class="op">(</span></span>
 <span>  <span class="va">pisa_mini</span>, estimator <span class="op">=</span> <span class="va">social_gradient</span>,</span>
@@ -340,7 +364,7 @@ outcome with replicate-weight inference – a multiple regression, a
 logistic model, or a multilevel model – pooling over plausible values
 exactly as the built-in estimators do. Supply a one-sided formula; the
 outcome is filled in from each plausible value.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/lsa_model.html">lsa_model</a></span><span class="op">(</span><span class="va">pisa_mini</span>, <span class="op">~</span> <span class="va">ESCS</span> <span class="op">+</span> <span class="va">IMMIG</span> <span class="op">+</span> <span class="va">female</span>, achievement <span class="op">=</span> <span class="va">math</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Model: stats::lm(&lt;PV&gt; ~ ESCS + IMMIG + female)</span></span>
 <span><span class="co">#&gt;   10 plausible value(s)  |  n = 2048</span></span>
@@ -358,7 +382,7 @@ outcome is filled in from each plausible value.</p>
 <p><code><a href="../reference/lsa_trend.html">lsa_trend()</a></code> compares a quantity across assessment cycles
 and folds the linking (equating) error into the standard error of the
 change:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">half</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pisa_mini</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="fl">2</span></span>
 <span><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/social_gradient.html">social_gradient</a></span><span class="op">(</span><span class="va">pisa_mini</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">half</span>, <span class="op">]</span>, <span class="va">math</span>, <span class="st">"ESCS"</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span>
 <span><span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/social_gradient.html">social_gradient</a></span><span class="op">(</span><span class="va">pisa_mini</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">half</span><span class="op">)</span>, <span class="op">]</span>, <span class="va">math</span>, <span class="st">"ESCS"</span>, design <span class="op">=</span> <span class="va">des</span><span class="op">)</span></span>
