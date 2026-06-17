@@ -57,17 +57,43 @@ generic regression output:
    variance used as the inequality index because it is ordinally invariant
    under the affine standardisation of test scores.
 
-Existing R tools occupy adjacent niches but leave this gap. `EdSurvey`
-[@edsurvey], `intsvy` [@intsvy], `BIFIEsurvey` [@bifiesurvey] and OECD's
-`Rrepest` [@rrepest] correctly handle plausible values and replicate weights,
-but expose only generic estimators (means, regressions, correlations,
-gap tests); the gradient, segregation and opportunity measures must be
-assembled by the analyst. The `segregation` package [@elbers2023] implements
-the index family and a finite-sample bias correction, but for residential and
-occupational data: it has no plausible-value pooling and no survey
-replicate-weight machinery. `lsastrat` is, to our knowledge, the first package
+Existing R tools occupy adjacent niches but leave this gap (Table 1).
+`EdSurvey` [@edsurvey], `intsvy` [@intsvy] and OECD's `Rrepest` [@rrepest]
+pool plausible values and replicate weights correctly, but expose fixed menus
+of generic estimators (means, correlations, regressions, two-group gap
+tests): the gradient's strength and curvature, every segregation index, and
+the opportunity decomposition must still be derived by hand, and `intsvy`
+reports estimates and standard errors without degrees of freedom, so the
+small-$m$ imputation uncertainty never reaches the reference distribution.
+`BIFIEsurvey` [@bifiesurvey] goes furthest: `BIFIE.by` applies a user-written
+statistic with full plausible-value and replicate inference. Two limits
+remain. First, the user must then implement the index and decomposition
+mathematics themselves -- precisely the error-prone step a domain package
+should remove. Second, and structurally, a replicate-weight loop cannot
+estimate the finite-sample bias of segregation indices at all: bias
+estimation requires re-sampling students within schools, a different
+resampling scheme from re-weighting by design replicates, which is why
+`lsastrat` nests a two-stage clustered bootstrap inside the Rubin pooling.
+The `segregation` package [@elbers2023] implements the index family with a
+bootstrap bias correction, but for residential and occupational data: it has
+no plausible values and no design weights, so its correction cannot be
+combined with LSA inference. `lsastrat` is, to our knowledge, the first package
 to emit all three quantity families as labelled outputs with LSA-appropriate
 inference.
+
+: Capabilities of related packages. PV = plausible values, RW = replicate
+weights. []{#tbl:compare}
+
+| Capability                                          | intsvy | EdSurvey | BIFIEsurvey | segregation | lsastrat |
+|:----------------------------------------------------|:------:|:--------:|:-----------:|:-----------:|:--------:|
+| PV pooling + RW variance (generic estimators)       | yes    | yes      | yes         | no          | yes      |
+| Gradient (slope, strength, curvature) as output     | no     | no       | no          | --          | yes      |
+| School segregation indices (D, S, Hutchens, H, M)   | no     | no       | no          | yes         | yes      |
+| Segregation bias correction nested in PV pooling    | no     | no       | no          | no PV/RW    | yes      |
+| IOp (Ferreira--Gignoux) + Shapley decomposition     | no     | no       | no          | no          | yes      |
+| Oaxaca--Blinder gap with PV/RW inference            | no     | no       | no          | no          | yes      |
+| Specification-curve multiverse over PVs/weights     | no     | no       | no          | no          | yes      |
+| Arbitrary model fitter on PV outcomes               | OLS/logit | selected models | user function | --   | any fitter |
 
 Two design choices target methodological correctness. First, pooled inference
 uses a Rubin $t$ reference with Barnard–Rubin degrees of freedom
@@ -92,12 +118,28 @@ specification-curve ("multiverse") engine for assessing how robust a finding is
 to defensible analytic choices. All results share one class with `coef`,
 `confint`, base-graphics and \pkg{ggplot2} `autoplot` methods.
 
-The estimators are cross-validated against established implementations: the
-socio-economic gradient reproduces `intsvy::pisa.reg.pv`, the dissimilarity and
-Theil's $H$ indices match the `segregation` package, and the relative
-inequality of opportunity matches a weighted regression $R^2$. A bundled,
-fully simulated data set (`pisa_mini`) makes every example and the test suite
-reproducible without access to restricted assessment microdata.
+For the working researcher this collapses a substantial amount of error-prone
+boilerplate. A design-correct ESCS gradient for one country implies 810
+weighted regressions (10 plausible values $\times$ 81 weights) pooled with
+Rubin's rules; existing packages automate the regression but leave the
+gradient, the indices, their pooling and the small-$m$ degrees of freedom to
+the analyst. In `lsastrat` each quantity is one call, a cross-country
+comparison is one `lsa_by()` call, and `tidy()` methods feed tables and
+figures directly.
+
+The estimators are validated at two levels. The test suite cross-validates
+against established implementations: the gradient reproduces
+`intsvy::pisa.reg.pv`, the segregation indices match the `segregation`
+package, and the relative inequality of opportunity matches a weighted
+regression $R^2$. A reproducible script (`data-raw/validate_pisa2022.R`)
+repeats these checks on the official PISA 2022 public-use microdata for six
+education systems: gradient slopes, standard errors and explained variance
+agree with `intsvy` to better than 0.01 score points, Theil's $H$ agrees with
+`segregation` to within $10^{-6}$, and the estimated between-school variance
+shares recover the familiar contrast between comprehensive and tracked systems
+(0.12 in Finland vs 0.47 in Germany). A bundled, fully simulated data set
+(`pisa_mini`) keeps every example and test reproducible without access to
+restricted microdata.
 
 # Example
 

@@ -20,7 +20,11 @@ Description: Computes educational stratification and inequality quantities
     replicate-weight aware specification-curve (multiverse) analyses.
     Complements general LSA packages (such as 'EdSurvey', 'intsvy' and
     'BIFIEsurvey') by packaging stratification measures that those tools leave
-    to be assembled by hand.
+    to be assembled by hand. Methods follow Rubin (1987)
+    <doi:10.1002/9780470316696> for plausible-value pooling, Ferreira and
+    Gignoux (2014) <doi:10.1093/wber/lht004> for inequality of educational
+    opportunity, and Elbers (2023) <doi:10.1177/0049124121986204> for
+    finite-sample segregation bias correction.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-GB

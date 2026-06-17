@@ -44,8 +44,13 @@ assessment cycles with the linking error folded in.
 General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`,
 OECD’s `Rrepest`) handle plausible values and replicate weights but
 expose only generic estimators (means, regression, correlation); none
-emits these stratification quantities as labelled outputs. `lsastrat`
-fills that gap and is designed to sit *alongside* those engines.
+emits these stratification quantities as labelled outputs, and a
+replicate-weight loop (even a user-supplied one, as in
+`BIFIEsurvey::BIFIE.by`) structurally cannot estimate the finite-sample
+bias of segregation indices — that requires re-sampling students within
+schools, which is why `lsastrat` nests a clustered bootstrap inside the
+Rubin pooling. `lsastrat` fills that gap and is designed to sit
+*alongside* those engines.
 
 ## Installation
 
@@ -132,7 +137,15 @@ Every estimator returns an `lsastrat_estimate` object, so `coef()`,
 The estimators are cross-validated against established implementations:
 `social_gradient()` reproduces `intsvy::pisa.reg.pv()`; the
 Dissimilarity and Theil’s H indices match the `segregation` package; and
-`ieop()` matches a weighted regression *R*².
+`ieop()` matches a weighted regression *R*². Beyond the test suite, a
+reproducible script
+([`data-raw/validate_pisa2022.R`](data-raw/validate_pisa2022.R)) repeats
+these checks on the **official PISA 2022 public-use microdata** for six
+education systems: slopes, standard errors and explained variance agree
+with `intsvy` to better than 0.01 score points, Theil’s H agrees with
+`segregation` to within 1e-6, and the between-school variance shares
+recover the familiar comprehensive-vs-tracked contrast (Finland 0.12 vs
+Germany 0.47).
 
 ## Citation
 
