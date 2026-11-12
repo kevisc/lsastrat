@@ -1,3 +1,32 @@
+# lsastrat 0.3.1
+
+* New `jk2_weights()`: builds the paired-jackknife replicate weights for
+  TIMSS and PIRLS from the final weight, `JKZONE` and `JKREP`. The IEA files
+  do not ship replicate weights, so until now users had to build them by hand
+  before they could set `rep_method = "JK2"`.
+* `variance_decomposition()` now works with paired-jackknife (`"JK2"`)
+  replicate weights, as used by TIMSS and PIRLS. A JK2 replicate sets the
+  weight of one whole school to zero. Version 0.3.0 then stopped with
+  "missing value where TRUE/FALSE needed". The fit now drops zero-weight rows
+  in each replicate. Results under BRR weights do not change.
+* New script `data-raw/validate_piaac.R`: a check on the PIAAC Cycle 1
+  public-use files for Germany (JK1) and Italy (JK2). It reproduces the
+  published national means in numeracy and literacy. The README now states
+  that the package also serves PIAAC.
+* `print()` for an `lsa_multiverse` object reported the share of positive
+  estimates under the label "same-signed", so a result that was negative in
+  every specification printed as "0% same-signed". The line now reports the
+  share of specifications that have the sign of the median estimate. The
+  object carries this value as `share_same_sign`; `share_pos` is unchanged.
+* `autoplot()` no longer calls `ggplot2::geom_errorbarh()`, which ggplot2 4.0
+  deprecated.
+* `citation("lsastrat")` now reports the installed version and the Zenodo DOI.
+  It reported version 0.1.0 before.
+* Help pages: the page on `lsa_design()` now says that every estimator accepts
+  a design, and the page on the shared methods lists all estimators. The page
+  on `lsa_model()` states that weights are not scaled by level in multilevel
+  models.
+
 # lsastrat 0.3.0
 
 General estimation, a shared design object, and tidyverse integration.
@@ -60,7 +89,7 @@ first-class outputs, with plausible-value pooling and replicate-weight variance.
 
 ## Estimators
 
-* `social_gradient()`: the socio-economic achievement gradient — slope,
+* `social_gradient()`: the socio-economic achievement gradient, with slope,
   strength (R-squared x 100) and curvature, following the OECD definition.
   Cross-validated against `intsvy::pisa.reg.pv()`.
 * `segregation_index()`: school segregation indices (Dissimilarity D, Gorard's

@@ -11,7 +11,11 @@ lsa_design(weight = NULL, repweights = NULL, rep_method = "BRR", fay = 0.5)
 
 \item{repweights}{Optional character vector of replicate-weight columns.}
 
-\item{rep_method, fay}{Replication design and Fay factor; see \code{\link[=rep_factor]{rep_factor()}}.}
+\item{rep_method}{Replication design: \code{"BRR"} (PISA), \code{"JK2"} (TIMSS,
+PIRLS) or \code{"JK1"}. PIAAC names the method of each country in the variable
+\code{VEMETHOD}.}
+
+\item{fay}{Fay factor for BRR; see \code{\link[=rep_factor]{rep_factor()}}.}
 }
 \value{
 An object of class \code{"lsa_design"}.
@@ -19,8 +23,7 @@ An object of class \code{"lsa_design"}.
 \description{
 A lightweight container for the weighting/replication arguments shared by
 every estimator, so they need not be repeated on each call. Pass the result
-as \verb{design =} to \code{\link[=lsa_multiverse]{lsa_multiverse()}}; its fields are spliced into every
-estimator call.
+as \verb{design =} to any estimator, to \code{\link[=lsa_model]{lsa_model()}}, or to \code{\link[=lsa_multiverse]{lsa_multiverse()}}.
 }
 \examples{
 lsa_design(weight = "W_FSTUWT", repweights = paste0("W_FSTURWT", 1:64))

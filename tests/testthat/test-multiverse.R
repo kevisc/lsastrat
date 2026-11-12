@@ -48,3 +48,22 @@ test_that("specification-curve plot returns invisibly", {
   grDevices::pdf(NULL); on.exit(grDevices::dev.off())
   expect_invisible(plot(mv))
 })
+
+test_that("the printed sign agreement does not depend on the direction", {
+  d <- sim_lsa(n = 600, slope = 30, n_pv = 3, n_rep = 16, seed = 11)
+  ach <- paste0("PV", 1:3, "MATH")
+  d2 <- d
+  d2[ach] <- lapply(d2[ach], function(v) -v)
+  des <- lsa_design(weight = "W_FSTUWT", repweights = reps_of(d))
+  run <- function(x) lsa_multiverse(
+    x, social_gradient,
+    grid = list(curvature = list(linear = FALSE, quadratic = TRUE)),
+    fixed = list(achievement = ach, escs = "ESCS"), design = des,
+    term = "slope")
+  pos <- run(d)
+  neg <- run(d2)
+  expect_equal(pos$share_same_sign, 1)
+  expect_equal(neg$share_same_sign, 1)
+  expect_equal(neg$share_pos, 0)
+  expect_output(print(neg), "100% of specifications share the sign")
+})

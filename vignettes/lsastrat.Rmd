@@ -18,7 +18,7 @@ data(pisa_mini)
 
 ## What lsastrat does
 
-`lsastrat` turns large-scale assessment (LSA) data — PISA, TIMSS, PIRLS — into
+`lsastrat` turns large-scale assessment (LSA) data (PISA, TIMSS, PIRLS, PIAAC) into
 the stratification and inequality quantities that education researchers report,
 and returns them as first-class objects. It handles the two features that make
 LSA data awkward:
@@ -102,8 +102,8 @@ segregation_index(pisa_mini, unit = "school_id", group = "IMMIG",
                   n_boot = 99, boot_seed = 1)
 ```
 
-The entropy and dissimilarity indices are upward-biased when schools are small
-— exactly the LSA case. With `variance = "bootstrap"` a two-stage clustered
+The entropy and dissimilarity indices are upward-biased when schools are small,
+which is exactly the LSA case. With `variance = "bootstrap"` a two-stage clustered
 bootstrap estimates and removes that bias (`debias = TRUE`) and gives a
 design-correct standard error. With replicate weights you can instead use them
 directly (no bias correction):
@@ -134,7 +134,7 @@ ieop(pisa_mini, achievement = math,
      weight = "W_FSTUWT", repweights = reps)
 ```
 
-The raw `iop` is the regression R² and is an **upper bound** — it inflates as
+The raw `iop` is the regression R² and is an **upper bound**: it inflates as
 the circumstance set grows. `iop_adj` is the degrees-of-freedom adjusted
 version; prefer it, and treat `iop` as the ceiling. `explained_var` is the
 absolute inequality of opportunity (variance of predicted scores) and
@@ -229,6 +229,35 @@ lsa_trend(list("2018" = c1, "2022" = c2), term = "slope", link_error = 3.5)
 
 On large data the replicate-weight refits can be run in parallel with
 `options(lsastrat.cores = 4)` (Unix/macOS).
+
+## TIMSS, PIRLS and PIAAC
+
+The estimators do not depend on PISA. They need plausible values, a final
+weight and replicate weights, and the name of the replication method.
+
+TIMSS and PIRLS ship no replicate weights. They ship the final weight
+(`TOTWGT`), a jackknife zone (`JKZONE`) and a replicate indicator (`JKREP`).
+`jk2_weights()` builds one replicate weight per zone from these columns. The
+toy sample below has four zones with two schools each.
+
+```{r jk2}
+iea <- data.frame(
+  JKZONE = rep(1:4, each = 6),
+  JKREP  = rep(rep(0:1, each = 3), times = 4),
+  TOTWGT = 1,
+  score  = c(480, 510, 495, 530, 500, 520, 470, 505, 490, 515, 525, 500,
+             540, 495, 510, 485, 500, 530, 505, 515, 490, 520, 480, 510)
+)
+iea <- jk2_weights(iea)
+iea_des <- lsa_design(weight = "TOTWGT", repweights = attr(iea, "repweights"),
+                      rep_method = "JK2")
+lsa_model(iea, ~ 1, achievement = "score", design = iea_des)
+```
+
+PIAAC ships 80 replicate weights (`SPFWT1` to `SPFWT80`) and names the
+replication method of each country in the variable `VEMETHOD`. Pass that
+method to `lsa_design()`; the script `data-raw/validate_piaac.R` in the source
+repository shows the full call.
 
 ## Where it fits
 

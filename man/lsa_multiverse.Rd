@@ -37,7 +37,11 @@ track; defaults to the first term.}
 \value{
 An object of class \code{"lsa_multiverse"}: a list with \code{specs} (one row
 per specification: a column per forking path plus \code{estimate}, \code{ci_lo},
-\code{ci_hi}) and a summary. Plot it with \code{\link[=plot.lsa_multiverse]{plot.lsa_multiverse()}}.
+\code{ci_hi}) and a summary: the median and range of the estimates, the share
+of specifications with a positive estimate (\code{share_pos}), the share that
+has the sign of the median (\code{share_same_sign}), and the share whose
+interval excludes zero (\code{share_sig}). Plot it with
+\code{\link[=plot.lsa_multiverse]{plot.lsa_multiverse()}}.
 }
 \description{
 Runs an lsastrat estimator across a grid of analytic specifications -- the

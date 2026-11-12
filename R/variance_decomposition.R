@@ -122,7 +122,16 @@ variance_decomposition <- function(data,
 }
 
 # Weighted ANOVA decomposition on an already-masked sample.
+# Rows with zero (or non-finite) weight are dropped first. A paired-jackknife
+# (JK2) replicate sets the weight of one whole school to zero; without the
+# drop that school's mean is 0/0 and every statistic becomes NaN.
 .vardecomp_fit <- function(y, unit, w) {
+  keep <- is.finite(w) & w > 0
+  if (!all(keep)) {
+    y <- y[keep]
+    unit <- unit[keep]
+    w <- w[keep]
+  }
   gm <- stats::weighted.mean(y, w)
   W <- sum(w)
   uw <- tapply(w, unit, sum)

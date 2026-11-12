@@ -78,7 +78,7 @@ rep_factor <- function(method = c("BRR", "JK2", "JK1"), n_rep, fay = 0.5) {
 #' Wiley. Barnard, J. & Rubin, D. B. (1999). Small-sample degrees of freedom
 #' with multiple imputation. *Biometrika*, 86(4), 948-955.
 #' @examples
-#' # five plausible values, each with a sampling variance of 4
+#' # five plausible values, each with a sampling variance of 16 (SE = 4)
 #' pool_pv(estimates = c(508, 511, 509, 513, 510), variances = rep(16, 5))
 #' @export
 pool_pv <- function(estimates, variances, level = 0.95) {
@@ -145,8 +145,9 @@ new_lsastrat_estimate <- function(coefficients, meta = list(), subclass) {
 
 #' Methods for lsastrat estimate objects
 #'
-#' All three estimators ([social_gradient()], [segregation_index()],
-#' [ieop()]) return an object of class `"lsastrat_estimate"` carrying a pooled
+#' Every estimator ([social_gradient()], [segregation_index()], [ieop()],
+#' [variance_decomposition()], [ieop_decompose()], [oaxaca_gap()] and
+#' [lsa_model()]) returns an object of class `"lsastrat_estimate"` with a pooled
 #' `coefficients` data frame (columns `estimate`, `se`, `statistic`, `df`,
 #' `p`, `ci_lo`, `ci_hi`). These methods provide a uniform interface.
 #'

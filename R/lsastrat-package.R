@@ -1,8 +1,8 @@
 #' lsastrat: Stratification and Inequality Metrics for Large-Scale Assessments
 #'
 #' Tools for computing educational stratification and inequality quantities
-#' from large-scale assessment (LSA) data (PISA, TIMSS, PIRLS) as first-class
-#' outputs, with correct plausible-value pooling and replicate-weight variance
+#' from large-scale assessment (LSA) data (PISA, TIMSS, PIRLS, PIAAC) as
+#' first-class outputs, with correct plausible-value pooling and replicate-weight variance
 #' estimation.
 #'
 #' @section Core estimation model:

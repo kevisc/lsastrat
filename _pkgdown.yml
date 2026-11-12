@@ -1,4 +1,4 @@
-url: https://kevisc.github.io/lsastrat/
+url: https://kevinschoenholzer.com/lsastrat/
 
 template:
   bootstrap: 5
@@ -33,6 +33,7 @@ reference:
   contents:
   - pool_pv
   - rep_factor
+  - jk2_weights
 - title: Methods
   desc: Accessors and plots for fitted objects.
   contents:

@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/kevisc/lsastrat/graph/badge.svg)](https://app.codecov.io/gh/kevisc/lsastrat)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20922260.svg)](https://doi.org/10.5281/zenodo.20922260)
 <!-- badges: end -->
 
 **Stratification and inequality metrics for large-scale assessment (LSA) data.**
@@ -29,12 +30,12 @@ PISA/TIMSS/PIRLS researchers normally hand-assemble, and returns them as
 first-class objects with correct **plausible-value pooling** (Rubin's rules)
 and **replicate-weight variance** (BRR/Fay, JK2, JK1):
 
-* `social_gradient()` — the socio-economic achievement gradient (slope,
+* `social_gradient()`: the socio-economic achievement gradient (slope,
   strength = *R*² × 100, curvature).
-* `segregation_index()` — school segregation indices (Dissimilarity, Gorard's
+* `segregation_index()`: school segregation indices (Dissimilarity, Gorard's
   S, isolation, Hutchens, Theil's H, mutual information) with a two-stage
   clustered bootstrap and **finite-sample bias correction**.
-* `ieop()` — the Ferreira–Gignoux decomposition of inequality of educational
+* `ieop()`: the Ferreira–Gignoux decomposition of inequality of educational
   opportunity.
 
 It also **decomposes** these quantities (between/within-school variance,
@@ -52,7 +53,7 @@ General LSA packages (`EdSurvey`, `intsvy`, `BIFIEsurvey`, `RALSA`, OECD's
 generic estimators (means, regression, correlation); none emits these
 stratification quantities as labelled outputs, and a replicate-weight loop
 (even a user-supplied one, as in `BIFIEsurvey::BIFIE.by`) structurally cannot
-estimate the finite-sample bias of segregation indices — that requires
+estimate the finite-sample bias of segregation indices. That requires
 re-sampling students within schools, which is why `lsastrat` nests a
 clustered bootstrap inside the Rubin pooling. `lsastrat` fills that gap and is
 designed to sit *alongside* those engines.
@@ -114,6 +115,14 @@ systems: slopes, standard errors and explained variance agree with `intsvy` to
 better than 0.01 score points, Theil's H agrees with `segregation` to within
 1e-6, and the between-school variance shares recover the familiar
 comprehensive-vs-tracked contrast (Finland 0.12 vs Germany 0.47).
+
+The package is not tied to one assessment. Any data set with plausible values
+and BRR, Fay, JK1 or JK2 replicate weights works, which includes the adult
+survey PIAAC. For TIMSS and PIRLS, `jk2_weights()` builds the replicate
+weights from `JKZONE` and `JKREP`. A second script
+([`data-raw/validate_piaac.R`](data-raw/validate_piaac.R)) runs on the PIAAC
+Cycle 1 public-use files for Germany (JK1) and Italy (JK2) and reproduces the
+published national means in numeracy and literacy to the first decimal.
 
 ## Citation
 

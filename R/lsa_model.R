@@ -34,7 +34,10 @@
 #' from refitting on the replicate weights, and the spread across plausible
 #' values adds the imputation component (Rubin's rules). With multilevel
 #' fitters this means many model fits (replicates x plausible values); use a
-#' modest number of replicates while prototyping. For weighted logistic models
+#' modest number of replicates while prototyping. A multilevel fitter receives
+#' the weights as case weights at the lowest level. `lsa_model()` does not
+#' scale weights by level, so read the fixed effects and treat the variance
+#' components of a weighted multilevel model with care. For weighted logistic models
 #' prefer `family = quasibinomial()` over `binomial()` to avoid the
 #' "non-integer #successes" warning that survey weights trigger.
 #'

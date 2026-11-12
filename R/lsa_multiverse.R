@@ -2,12 +2,15 @@
 #'
 #' A lightweight container for the weighting/replication arguments shared by
 #' every estimator, so they need not be repeated on each call. Pass the result
-#' as `design =` to [lsa_multiverse()]; its fields are spliced into every
-#' estimator call.
+#' as `design =` to any estimator, to [lsa_model()], or to [lsa_multiverse()].
+#'
+#' @param rep_method Replication design: `"BRR"` (PISA), `"JK2"` (TIMSS,
+#'   PIRLS) or `"JK1"`. PIAAC names the method of each country in the variable
+#'   `VEMETHOD`.
 #'
 #' @param weight Name of the final student weight column.
 #' @param repweights Optional character vector of replicate-weight columns.
-#' @param rep_method,fay Replication design and Fay factor; see [rep_factor()].
+#' @param fay Fay factor for BRR; see [rep_factor()].
 #' @return An object of class `"lsa_design"`.
 #' @examples
 #' lsa_design(weight = "W_FSTUWT", repweights = paste0("W_FSTURWT", 1:64))
@@ -43,7 +46,11 @@ lsa_design <- function(weight = NULL, repweights = NULL,
 #'
 #' @return An object of class `"lsa_multiverse"`: a list with `specs` (one row
 #'   per specification: a column per forking path plus `estimate`, `ci_lo`,
-#'   `ci_hi`) and a summary. Plot it with [plot.lsa_multiverse()].
+#'   `ci_hi`) and a summary: the median and range of the estimates, the share
+#'   of specifications with a positive estimate (`share_pos`), the share that
+#'   has the sign of the median (`share_same_sign`), and the share whose
+#'   interval excludes zero (`share_sig`). Plot it with
+#'   [plot.lsa_multiverse()].
 #'
 #' @examples
 #' data(pisa_mini)
@@ -111,7 +118,9 @@ lsa_multiverse <- function(data, estimator, grid, fixed = list(),
          median = stats::median(specs$estimate),
          range = range(specs$estimate),
          share_sig = mean(specs$ci_lo > 0 | specs$ci_hi < 0),
-         share_pos = mean(specs$estimate > 0)),
+         share_pos = mean(specs$estimate > 0),
+         share_same_sign = mean(sign(specs$estimate) ==
+                                  sign(stats::median(specs$estimate)))),
     class = "lsa_multiverse"
   )
 }
@@ -122,8 +131,9 @@ print.lsa_multiverse <- function(x, ...) {
               x$estimator, x$term, x$n_spec))
   cat(sprintf("  median estimate: %.3g   range: [%.3g, %.3g]\n",
               x$median, x$range[1], x$range[2]))
-  cat(sprintf("  %.0f%% of specifications same-signed; %.0f%% exclude 0 (95%% CI)\n",
-              100 * x$share_pos, 100 * x$share_sig))
+  cat(sprintf(paste0("  %.0f%% of specifications share the sign of the median; ",
+                     "%.0f%% exclude 0 (95%% CI)\n"),
+              100 * x$share_same_sign, 100 * x$share_sig))
   invisible(x)
 }
 

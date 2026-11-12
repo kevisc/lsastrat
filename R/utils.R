@@ -1,4 +1,4 @@
-# Internal input validators shared by the three estimators, so error
+# Internal input validators shared by all estimators, so error
 # messages and argument checking are consistent across the package.
 
 .assert_data_frame <- function(data) {

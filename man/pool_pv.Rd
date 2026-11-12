@@ -45,7 +45,7 @@ to the normal (\eqn{\nu = \infty}); when there is no sampling variance the
 reference is \eqn{t} on \eqn{m - 1} degrees of freedom.
 }
 \examples{
-# five plausible values, each with a sampling variance of 4
+# five plausible values, each with a sampling variance of 16 (SE = 4)
 pool_pv(estimates = c(508, 511, 509, 513, 510), variances = rep(16, 5))
 }
 \references{

@@ -2,6 +2,7 @@ BIFIEsurvey
 Biometrika
 CMD
 Codecov
+Davier
 ESCS
 EdSurvey
 Elbers
@@ -11,18 +12,23 @@ Gorard
 Gorard's
 Gorard’s
 Hutchens
+ICCS
+ICILS
 IEA
 IOp
 JK
 Kish's
 LSA
+LaRoche
 Lifecycle
 Lugano
+Mullis
 Neumark
 Nonresponse
 OECD's
 OECD’s
 ORCID
+PIAAC
 PIRLS
 PV
 PVs
@@ -35,6 +41,7 @@ Theil's
 Theil’s
 USI
 Università
+Zenodo
 autoplot
 cutoff
 della
@@ -45,6 +52,7 @@ intsvy
 italiana
 labor
 lsa
+microdata
 ordinally
 se
 tidyverse

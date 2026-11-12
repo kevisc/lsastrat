@@ -33,8 +33,8 @@ autoplot.lsastrat_estimate <- function(object, ...) {
   co$term <- factor(rownames(co), levels = rev(rownames(co)))
   ggplot2::ggplot(co, ggplot2::aes(x = estimate, y = term)) +
     ggplot2::geom_vline(xintercept = 0, linetype = 3, colour = "grey60") +
-    ggplot2::geom_errorbarh(ggplot2::aes(xmin = ci_lo, xmax = ci_hi),
-                            height = 0.2) +
+    ggplot2::geom_errorbar(ggplot2::aes(xmin = ci_lo, xmax = ci_hi),
+                           orientation = "y", width = 0.2) +
     ggplot2::geom_point(size = 2.2) +
     ggplot2::labs(x = "Estimate", y = NULL, title = object$estimator)
 }
@@ -63,8 +63,8 @@ autoplot.lsastrat_by <- function(object, term = NULL, ...) {
   d$group <- stats::reorder(factor(d$group), d$estimate)
   ggplot2::ggplot(d, ggplot2::aes(x = estimate, y = group)) +
     ggplot2::geom_vline(xintercept = 0, linetype = 3, colour = "grey60") +
-    ggplot2::geom_errorbarh(ggplot2::aes(xmin = ci_lo, xmax = ci_hi),
-                            height = 0.2) +
+    ggplot2::geom_errorbar(ggplot2::aes(xmin = ci_lo, xmax = ci_hi),
+                           orientation = "y", width = 0.2) +
     ggplot2::geom_point(size = 2.2) +
     ggplot2::labs(x = term, y = object$by,
                   title = sprintf("%s by %s", object$estimator, object$by))

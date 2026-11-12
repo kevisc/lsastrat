@@ -35,8 +35,9 @@
 a data frame with a \code{term} column; \code{print}/\code{summary} the object invisibly.
 }
 \description{
-All three estimators (\code{\link[=social_gradient]{social_gradient()}}, \code{\link[=segregation_index]{segregation_index()}},
-\code{\link[=ieop]{ieop()}}) return an object of class \code{"lsastrat_estimate"} carrying a pooled
+Every estimator (\code{\link[=social_gradient]{social_gradient()}}, \code{\link[=segregation_index]{segregation_index()}}, \code{\link[=ieop]{ieop()}},
+\code{\link[=variance_decomposition]{variance_decomposition()}}, \code{\link[=ieop_decompose]{ieop_decompose()}}, \code{\link[=oaxaca_gap]{oaxaca_gap()}} and
+\code{\link[=lsa_model]{lsa_model()}}) returns an object of class \code{"lsastrat_estimate"} with a pooled
 \code{coefficients} data frame (columns \code{estimate}, \code{se}, \code{statistic}, \code{df},
 \code{p}, \code{ci_lo}, \code{ci_hi}). These methods provide a uniform interface.
 }

@@ -7,8 +7,8 @@
 \title{lsastrat: Stratification and Inequality Metrics for Large-Scale Assessments}
 \description{
 Tools for computing educational stratification and inequality quantities
-from large-scale assessment (LSA) data (PISA, TIMSS, PIRLS) as first-class
-outputs, with correct plausible-value pooling and replicate-weight variance
+from large-scale assessment (LSA) data (PISA, TIMSS, PIRLS, PIAAC) as
+first-class outputs, with correct plausible-value pooling and replicate-weight variance
 estimation.
 }
 \section{Core estimation model}{
@@ -33,7 +33,7 @@ to sequential. Results are deterministic and do not depend on the core count.
 Useful links:
 \itemize{
   \item \url{https://github.com/kevisc/lsastrat}
-  \item \url{https://kevisc.github.io/lsastrat/}
+  \item \url{https://kevinschoenholzer.com/lsastrat/}
   \item Report bugs at \url{https://github.com/kevisc/lsastrat/issues}
 }
 
