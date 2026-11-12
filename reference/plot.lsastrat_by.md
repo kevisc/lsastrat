@@ -2,7 +2,7 @@
 
 Plots the point estimate and confidence interval of one term across the
 groups produced by
-[`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md),
+[`lsa_by()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_by.md),
 sorted by estimate. A horizontal axis shows the quantity; each row is a
 group.
 

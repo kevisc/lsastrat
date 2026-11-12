@@ -2,9 +2,10 @@
 
 A lightweight container for the weighting/replication arguments shared
 by every estimator, so they need not be repeated on each call. Pass the
-result as `design =` to
-[`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md);
-its fields are spliced into every estimator call.
+result as `design =` to any estimator, to
+[`lsa_model()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_model.md),
+or to
+[`lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_multiverse.md).
 
 ## Usage
 
@@ -22,10 +23,15 @@ lsa_design(weight = NULL, repweights = NULL, rep_method = "BRR", fay = 0.5)
 
   Optional character vector of replicate-weight columns.
 
-- rep_method, fay:
+- rep_method:
 
-  Replication design and Fay factor; see
-  [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+  Replication design: `"BRR"` (PISA), `"JK2"` (TIMSS, PIRLS) or `"JK1"`.
+  PIAAC names the method of each country in the variable `VEMETHOD`.
+
+- fay:
+
+  Fay factor for BRR; see
+  [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md).
 
 ## Value
 

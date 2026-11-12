@@ -62,9 +62,9 @@ lsa_model(
 
   Weighting/replication specification, exactly as in the other
   estimators (see
-  [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+  [`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md)
   and
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)).
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)).
 
 - level:
 
@@ -79,7 +79,7 @@ lsa_model(
 
 An object of class `"lsa_model"` / `"lsastrat_estimate"` with one row
 per model coefficient (see
-[lsastrat_estimate](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+[lsastrat_estimate](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
 for methods).
 
 ## Details
@@ -88,8 +88,12 @@ Standard errors are design-based: each coefficient's sampling variance
 comes from refitting on the replicate weights, and the spread across
 plausible values adds the imputation component (Rubin's rules). With
 multilevel fitters this means many model fits (replicates x plausible
-values); use a modest number of replicates while prototyping. For
-weighted logistic models prefer `family = quasibinomial()` over
+values); use a modest number of replicates while prototyping. A
+multilevel fitter receives the weights as case weights at the lowest
+level. `lsa_model()` does not scale weights by level, so read the fixed
+effects and treat the variance components of a weighted multilevel model
+with care. For weighted logistic models prefer
+`family = quasibinomial()` over
 [`binomial()`](https://rdrr.io/r/stats/family.html) to avoid the
 "non-integer \#successes" warning that survey weights trigger.
 

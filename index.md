@@ -8,30 +8,30 @@ PISA/TIMSS/PIRLS researchers normally hand-assemble, and returns them as
 first-class objects with correct **plausible-value pooling** (Rubin’s
 rules) and **replicate-weight variance** (BRR/Fay, JK2, JK1):
 
-- [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
-  — the socio-economic achievement gradient (slope, strength = *R*² ×
-  100, curvature).
-- [`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md)
-  — school segregation indices (Dissimilarity, Gorard’s S, isolation,
+- [`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md):
+  the socio-economic achievement gradient (slope, strength = *R*² × 100,
+  curvature).
+- [`segregation_index()`](https://kevinschoenholzer.com/lsastrat/reference/segregation_index.md):
+  school segregation indices (Dissimilarity, Gorard’s S, isolation,
   Hutchens, Theil’s H, mutual information) with a two-stage clustered
   bootstrap and **finite-sample bias correction**.
-- [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) — the
-  Ferreira–Gignoux decomposition of inequality of educational
+- [`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md):
+  the Ferreira–Gignoux decomposition of inequality of educational
   opportunity.
 
 It also **decomposes** these quantities (between/within-school variance,
 Shapley decomposition of inequality of opportunity, Oaxaca–Blinder gap
 decomposition), **compares** them across countries/subgroups
-([`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md),
-[`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)),
+([`lsa_by()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_by.md),
+[`equity_scatter()`](https://kevinschoenholzer.com/lsastrat/reference/equity_scatter.md)),
 and runs PV/weight-aware **specification-curve (multiverse)** analyses
-([`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)),
+([`lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_multiverse.md)),
 with base and `ggplot2` (`autoplot()`) graphics throughout. For models
 beyond the built-in estimators,
-[`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+[`lsa_model()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_model.md)
 fits **any** model (`lm`, `glm`, multilevel `lme4::lmer`) to
 plausible-value outcomes with replicate-weight inference, and
-[`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+[`lsa_trend()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_trend.md)
 compares a quantity across assessment cycles with the linking error
 folded in.
 
@@ -41,7 +41,7 @@ expose only generic estimators (means, regression, correlation); none
 emits these stratification quantities as labelled outputs, and a
 replicate-weight loop (even a user-supplied one, as in
 `BIFIEsurvey::BIFIE.by`) structurally cannot estimate the finite-sample
-bias of segregation indices — that requires re-sampling students within
+bias of segregation indices. That requires re-sampling students within
 schools, which is why `lsastrat` nests a clustered bootstrap inside the
 Rubin pooling. `lsastrat` fills that gap and is designed to sit
 *alongside* those engines.
@@ -136,20 +136,30 @@ Every estimator returns an `lsastrat_estimate` object, so
 ## Validation
 
 The estimators are cross-validated against established implementations:
-[`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+[`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md)
 reproduces
 [`intsvy::pisa.reg.pv()`](https://rdrr.io/pkg/intsvy/man/pisa.reg.pv.html);
 the Dissimilarity and Theil’s H indices match the `segregation` package;
-and [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md)
+and [`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md)
 matches a weighted regression *R*². Beyond the test suite, a
 reproducible script
-([`data-raw/validate_pisa2022.R`](https://kevisc.github.io/lsastrat/data-raw/validate_pisa2022.R))
+([`data-raw/validate_pisa2022.R`](https://kevinschoenholzer.com/lsastrat/data-raw/validate_pisa2022.R))
 repeats these checks on the **official PISA 2022 public-use microdata**
 for six education systems: slopes, standard errors and explained
 variance agree with `intsvy` to better than 0.01 score points, Theil’s H
 agrees with `segregation` to within 1e-6, and the between-school
 variance shares recover the familiar comprehensive-vs-tracked contrast
 (Finland 0.12 vs Germany 0.47).
+
+The package is not tied to one assessment. Any data set with plausible
+values and BRR, Fay, JK1 or JK2 replicate weights works, which includes
+the adult survey PIAAC. For TIMSS and PIRLS,
+[`jk2_weights()`](https://kevinschoenholzer.com/lsastrat/reference/jk2_weights.md)
+builds the replicate weights from `JKZONE` and `JKREP`. A second script
+([`data-raw/validate_piaac.R`](https://kevinschoenholzer.com/lsastrat/data-raw/validate_piaac.R))
+runs on the PIAAC Cycle 1 public-use files for Germany (JK1) and Italy
+(JK2) and reproduces the published national means in numeracy and
+literacy to the first decimal.
 
 ## Citation
 
@@ -159,9 +169,9 @@ See `citation("lsastrat")`.
 
 Please report bugs and ask questions on the [issue
 tracker](https://github.com/kevisc/lsastrat/issues). See
-[CONTRIBUTING](https://kevisc.github.io/lsastrat/CONTRIBUTING.md) and
-the [Code of
-Conduct](https://kevisc.github.io/lsastrat/CODE_OF_CONDUCT.md).
+[CONTRIBUTING](https://kevinschoenholzer.com/lsastrat/CONTRIBUTING.md)
+and the [Code of
+Conduct](https://kevinschoenholzer.com/lsastrat/CODE_OF_CONDUCT.md).
 
 ## Roadmap
 

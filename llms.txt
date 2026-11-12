@@ -8,30 +8,30 @@ PISA/TIMSS/PIRLS researchers normally hand-assemble, and returns them as
 first-class objects with correct **plausible-value pooling** (Rubin’s
 rules) and **replicate-weight variance** (BRR/Fay, JK2, JK1):
 
-- [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
-  — the socio-economic achievement gradient (slope, strength = *R*² ×
-  100, curvature).
-- [`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md)
-  — school segregation indices (Dissimilarity, Gorard’s S, isolation,
+- [`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md):
+  the socio-economic achievement gradient (slope, strength = *R*² × 100,
+  curvature).
+- [`segregation_index()`](https://kevinschoenholzer.com/lsastrat/reference/segregation_index.md):
+  school segregation indices (Dissimilarity, Gorard’s S, isolation,
   Hutchens, Theil’s H, mutual information) with a two-stage clustered
   bootstrap and **finite-sample bias correction**.
-- [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) — the
-  Ferreira–Gignoux decomposition of inequality of educational
+- [`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md):
+  the Ferreira–Gignoux decomposition of inequality of educational
   opportunity.
 
 It also **decomposes** these quantities (between/within-school variance,
 Shapley decomposition of inequality of opportunity, Oaxaca–Blinder gap
 decomposition), **compares** them across countries/subgroups
-([`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md),
-[`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)),
+([`lsa_by()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_by.md),
+[`equity_scatter()`](https://kevinschoenholzer.com/lsastrat/reference/equity_scatter.md)),
 and runs PV/weight-aware **specification-curve (multiverse)** analyses
-([`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)),
+([`lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_multiverse.md)),
 with base and `ggplot2` (`autoplot()`) graphics throughout. For models
 beyond the built-in estimators,
-[`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+[`lsa_model()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_model.md)
 fits **any** model (`lm`, `glm`, multilevel `lme4::lmer`) to
 plausible-value outcomes with replicate-weight inference, and
-[`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+[`lsa_trend()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_trend.md)
 compares a quantity across assessment cycles with the linking error
 folded in.
 
@@ -41,7 +41,7 @@ expose only generic estimators (means, regression, correlation); none
 emits these stratification quantities as labelled outputs, and a
 replicate-weight loop (even a user-supplied one, as in
 `BIFIEsurvey::BIFIE.by`) structurally cannot estimate the finite-sample
-bias of segregation indices — that requires re-sampling students within
+bias of segregation indices. That requires re-sampling students within
 schools, which is why `lsastrat` nests a clustered bootstrap inside the
 Rubin pooling. `lsastrat` fills that gap and is designed to sit
 *alongside* those engines.
@@ -136,20 +136,30 @@ Every estimator returns an `lsastrat_estimate` object, so
 ## Validation
 
 The estimators are cross-validated against established implementations:
-[`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+[`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md)
 reproduces
 [`intsvy::pisa.reg.pv()`](https://rdrr.io/pkg/intsvy/man/pisa.reg.pv.html);
 the Dissimilarity and Theil’s H indices match the `segregation` package;
-and [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md)
+and [`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md)
 matches a weighted regression *R*². Beyond the test suite, a
 reproducible script
-([`data-raw/validate_pisa2022.R`](https://kevisc.github.io/lsastrat/data-raw/validate_pisa2022.R))
+([`data-raw/validate_pisa2022.R`](https://kevinschoenholzer.com/lsastrat/data-raw/validate_pisa2022.R))
 repeats these checks on the **official PISA 2022 public-use microdata**
 for six education systems: slopes, standard errors and explained
 variance agree with `intsvy` to better than 0.01 score points, Theil’s H
 agrees with `segregation` to within 1e-6, and the between-school
 variance shares recover the familiar comprehensive-vs-tracked contrast
 (Finland 0.12 vs Germany 0.47).
+
+The package is not tied to one assessment. Any data set with plausible
+values and BRR, Fay, JK1 or JK2 replicate weights works, which includes
+the adult survey PIAAC. For TIMSS and PIRLS,
+[`jk2_weights()`](https://kevinschoenholzer.com/lsastrat/reference/jk2_weights.md)
+builds the replicate weights from `JKZONE` and `JKREP`. A second script
+([`data-raw/validate_piaac.R`](https://kevinschoenholzer.com/lsastrat/data-raw/validate_piaac.R))
+runs on the PIAAC Cycle 1 public-use files for Germany (JK1) and Italy
+(JK2) and reproduces the published national means in numeracy and
+literacy to the first decimal.
 
 ## Citation
 
@@ -159,9 +169,9 @@ See `citation("lsastrat")`.
 
 Please report bugs and ask questions on the [issue
 tracker](https://github.com/kevisc/lsastrat/issues). See
-[CONTRIBUTING](https://kevisc.github.io/lsastrat/CONTRIBUTING.md) and
-the [Code of
-Conduct](https://kevisc.github.io/lsastrat/CODE_OF_CONDUCT.md).
+[CONTRIBUTING](https://kevinschoenholzer.com/lsastrat/CONTRIBUTING.md)
+and the [Code of
+Conduct](https://kevinschoenholzer.com/lsastrat/CODE_OF_CONDUCT.md).
 
 ## Roadmap
 
@@ -184,93 +194,95 @@ MIT © Kevin Schoenholzer
 
 First-class stratification and inequality quantities.
 
-- [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+- [`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md)
   : Socio-economic achievement gradient
-- [`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md)
+- [`segregation_index()`](https://kevinschoenholzer.com/lsastrat/reference/segregation_index.md)
   : School segregation indices for large-scale assessment data
-- [`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md) :
+- [`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md) :
   Inequality of educational opportunity (Ferreira-Gignoux)
-- [`variance_decomposition()`](https://kevisc.github.io/lsastrat/reference/variance_decomposition.md)
+- [`variance_decomposition()`](https://kevinschoenholzer.com/lsastrat/reference/variance_decomposition.md)
   : Between- and within-school variance decomposition
 
 ## General modelling
 
 Fit arbitrary models, and compare across cycles.
 
-- [`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+- [`lsa_model()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_model.md)
   : Fit any model to plausible-value outcomes with replicate-weight
   inference
-- [`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+- [`lsa_trend()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_trend.md)
   : Trend across assessment cycles with linking error
 
 ## Decompositions
 
 Attributing inequality to its sources.
 
-- [`ieop_decompose()`](https://kevisc.github.io/lsastrat/reference/ieop_decompose.md)
+- [`ieop_decompose()`](https://kevinschoenholzer.com/lsastrat/reference/ieop_decompose.md)
   : Shapley decomposition of inequality of educational opportunity
-- [`oaxaca_gap()`](https://kevisc.github.io/lsastrat/reference/oaxaca_gap.md)
+- [`oaxaca_gap()`](https://kevinschoenholzer.com/lsastrat/reference/oaxaca_gap.md)
   : Oaxaca-Blinder decomposition of an achievement gap
 
 ## Comparison and multiverse
 
 Comparative and robustness analysis.
 
-- [`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md) :
-  Run an estimator across groups (e.g. countries)
-- [`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)
+- [`lsa_by()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_by.md)
+  : Run an estimator across groups (e.g. countries)
+- [`equity_scatter()`](https://kevinschoenholzer.com/lsastrat/reference/equity_scatter.md)
   : Quality-equity scatter across groups
-- [`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+- [`lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_multiverse.md)
   : Plausible-value / weight-aware multiverse (specification-curve)
   analysis
-- [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+- [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   : Bundle a survey design for reuse
 
 ## Variance engine
 
 The shared plausible-value pooling and replicate-weight machinery.
 
-- [`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md)
+- [`pool_pv()`](https://kevinschoenholzer.com/lsastrat/reference/pool_pv.md)
   : Pool point estimates and variances across plausible values (Rubin's
   rules)
-- [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md)
+- [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md)
   : Replicate-weight variance factors
+- [`jk2_weights()`](https://kevinschoenholzer.com/lsastrat/reference/jk2_weights.md)
+  : Build paired-jackknife (JK2) replicate weights for TIMSS and PIRLS
 
 ## Methods
 
 Accessors and plots for fitted objects.
 
-- [`print(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
-  [`summary(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
-  [`coef(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
-  [`confint(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
-  [`as.data.frame(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+- [`print(`*`<lsastrat_estimate>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
+  [`summary(`*`<lsastrat_estimate>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
+  [`coef(`*`<lsastrat_estimate>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
+  [`confint(`*`<lsastrat_estimate>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
+  [`as.data.frame(`*`<lsastrat_estimate>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
   : Methods for lsastrat estimate objects
-- [`tidy()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
-  [`glance()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+- [`tidy()`](https://kevinschoenholzer.com/lsastrat/reference/tidy.lsastrat_estimate.md)
+  [`glance()`](https://kevinschoenholzer.com/lsastrat/reference/tidy.lsastrat_estimate.md)
   : Tidy an lsastrat estimate
-- [`autoplot(`*`<lsastrat_estimate>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
-  [`autoplot(`*`<social_gradient>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
-  [`autoplot(`*`<lsastrat_by>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
-  [`autoplot(`*`<equity_scatter>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
-  [`autoplot(`*`<lsa_multiverse>`*`)`](https://kevisc.github.io/lsastrat/reference/autoplot.lsastrat.md)
+- [`autoplot(`*`<lsastrat_estimate>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<social_gradient>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<lsastrat_by>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<equity_scatter>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/autoplot.lsastrat.md)
+  [`autoplot(`*`<lsa_multiverse>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/autoplot.lsastrat.md)
   : ggplot2 autoplot methods
-- [`plot(`*`<social_gradient>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.social_gradient.md)
+- [`plot(`*`<social_gradient>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/plot.social_gradient.md)
   : Plot a socio-economic achievement gradient
-- [`plot(`*`<segregation>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.segregation.md)
+- [`plot(`*`<segregation>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/plot.segregation.md)
   : Plot a school segregation profile
-- [`plot(`*`<lsastrat_by>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsastrat_by.md)
+- [`plot(`*`<lsastrat_by>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/plot.lsastrat_by.md)
   : Forest / caterpillar plot of an estimate across groups
-- [`plot(`*`<equity_scatter>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.equity_scatter.md)
+- [`plot(`*`<equity_scatter>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/plot.equity_scatter.md)
   : Plot a quality-equity scatter
-- [`plot(`*`<lsa_multiverse>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsa_multiverse.md)
+- [`plot(`*`<lsa_multiverse>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/plot.lsa_multiverse.md)
   : Specification-curve plot
-- [`plot(`*`<lsa_trend>`*`)`](https://kevisc.github.io/lsastrat/reference/plot.lsa_trend.md)
+- [`plot(`*`<lsa_trend>`*`)`](https://kevinschoenholzer.com/lsastrat/reference/plot.lsa_trend.md)
   : Plot a cross-cycle trend
 
 ## Data
 
-- [`pisa_mini`](https://kevisc.github.io/lsastrat/reference/pisa_mini.md)
+- [`pisa_mini`](https://kevinschoenholzer.com/lsastrat/reference/pisa_mini.md)
   : Simulated PISA-like assessment data
 
 # Articles
@@ -278,4 +290,4 @@ Accessors and plots for fitted objects.
 ### All vignettes
 
 - [Getting started with
-  lsastrat](https://kevisc.github.io/lsastrat/articles/lsastrat.md):
+  lsastrat](https://kevinschoenholzer.com/lsastrat/articles/lsastrat.md):

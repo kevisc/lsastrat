@@ -1,10 +1,10 @@
 # Run an estimator across groups (e.g. countries)
 
 Applies any lsastrat estimator
-([`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md),
-[`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md),
-[`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md),
-[`variance_decomposition()`](https://kevisc.github.io/lsastrat/reference/variance_decomposition.md))
+([`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md),
+[`segregation_index()`](https://kevinschoenholzer.com/lsastrat/reference/segregation_index.md),
+[`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md),
+[`variance_decomposition()`](https://kevinschoenholzer.com/lsastrat/reference/variance_decomposition.md))
 separately within each level of a grouping variable and stacks the
 pooled coefficients into one tidy, comparable table. This is the
 workhorse for comparative large-scale assessment research: one call
@@ -49,7 +49,7 @@ with a warning.
 
 ## See also
 
-[`plot.lsastrat_by()`](https://kevisc.github.io/lsastrat/reference/plot.lsastrat_by.md)
+[`plot.lsastrat_by()`](https://kevinschoenholzer.com/lsastrat/reference/plot.lsastrat_by.md)
 for forest/caterpillar plots.
 
 ## Examples

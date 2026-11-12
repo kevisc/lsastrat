@@ -1,7 +1,7 @@
 # lsastrat: Stratification and Inequality Metrics for Large-Scale Assessments
 
 Tools for computing educational stratification and inequality quantities
-from large-scale assessment (LSA) data (PISA, TIMSS, PIRLS) as
+from large-scale assessment (LSA) data (PISA, TIMSS, PIRLS, PIAAC) as
 first-class outputs, with correct plausible-value pooling and
 replicate-weight variance estimation.
 
@@ -12,7 +12,7 @@ computed separately on each plausible value (PV), and for each PV on
 each set of replicate weights. The replicate weights give the *sampling*
 variance (design-based); the spread *across* PVs gives the *imputation*
 (measurement) variance. The two are combined with Rubin's rules. See
-[`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md).
+[`pool_pv()`](https://kevinschoenholzer.com/lsastrat/reference/pool_pv.md).
 
 ## Parallel processing
 
@@ -29,7 +29,7 @@ Useful links:
 
 - <https://github.com/kevisc/lsastrat>
 
-- <https://kevisc.github.io/lsastrat/>
+- <https://kevinschoenholzer.com/lsastrat/>
 
 - Report bugs at <https://github.com/kevisc/lsastrat/issues>
 

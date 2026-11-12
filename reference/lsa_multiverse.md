@@ -45,7 +45,7 @@ lsa_multiverse(
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   whose fields are added to `fixed`.
 
 - term:
@@ -61,8 +61,11 @@ lsa_multiverse(
 
 An object of class `"lsa_multiverse"`: a list with `specs` (one row per
 specification: a column per forking path plus `estimate`, `ci_lo`,
-`ci_hi`) and a summary. Plot it with
-[`plot.lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/plot.lsa_multiverse.md).
+`ci_hi`) and a summary: the median and range of the estimates, the share
+of specifications with a positive estimate (`share_pos`), the share that
+has the sign of the median (`share_same_sign`), and the share whose
+interval excludes zero (`share_sig`). Plot it with
+[`plot.lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/plot.lsa_multiverse.md).
 
 ## Examples
 
@@ -80,5 +83,5 @@ mv <- lsa_multiverse(
 mv
 #> Multiverse: `social_gradient`, term = slope  (4 specifications)
 #>   median estimate: 39.1   range: [36.8, 41.4]
-#>   100% of specifications same-signed; 100% exclude 0 (95% CI)
+#>   100% of specifications share the sign of the median; 100% exclude 0 (95% CI)
 ```

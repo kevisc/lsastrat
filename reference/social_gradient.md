@@ -59,12 +59,12 @@ social_gradient(
 - fay:
 
   Fay adjustment for BRR (PISA uses 0.5); see
-  [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+  [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md).
 
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
   it overrides those arguments.
 
@@ -80,7 +80,7 @@ social_gradient(
 ## Value
 
 An object of class `"social_gradient"` / `"lsastrat_estimate"` (see
-[lsastrat_estimate](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+[lsastrat_estimate](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
 for methods): a list with a `coefficients` data frame (rows `slope`,
 `strength`, and optionally `curvature`) plus metadata.
 
@@ -89,11 +89,11 @@ for methods): a list with a `coefficients` data frame (rows `slope`,
 Achievement is supplied as a set of plausible values (PVs); estimates
 are pooled across PVs with Rubin's rules, and the sampling variance is
 obtained from replicate weights when supplied (see
-[`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md)
+[`pool_pv()`](https://kevinschoenholzer.com/lsastrat/reference/pool_pv.md)
 and
-[`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md)).
+[`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md)).
 Inference uses a \\t\\ reference (see
-[`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md)
+[`pool_pv()`](https://kevinschoenholzer.com/lsastrat/reference/pool_pv.md)
 for the degrees of freedom).
 
 ## References

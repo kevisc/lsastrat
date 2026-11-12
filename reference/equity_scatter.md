@@ -48,12 +48,12 @@ equity_scatter(
 - repweights, rep_method, fay:
 
   Replicate-weight specification passed to
-  [`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md).
+  [`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md).
 
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
   it overrides those arguments.
 
@@ -61,7 +61,7 @@ equity_scatter(
 
 An object of class `"equity_scatter"`: a list with `data` (a data frame
 of `group`, `mean`, `slope`, `strength`) plus metadata. Plot it with
-[`plot.equity_scatter()`](https://kevisc.github.io/lsastrat/reference/plot.equity_scatter.md).
+[`plot.equity_scatter()`](https://kevinschoenholzer.com/lsastrat/reference/plot.equity_scatter.md).
 
 ## Examples
 

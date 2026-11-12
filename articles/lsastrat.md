@@ -8,8 +8,8 @@ data(pisa_mini)
 
 ## What lsastrat does
 
-`lsastrat` turns large-scale assessment (LSA) data — PISA, TIMSS, PIRLS
-— into the stratification and inequality quantities that education
+`lsastrat` turns large-scale assessment (LSA) data (PISA, TIMSS, PIRLS,
+PIAAC) into the stratification and inequality quantities that education
 researchers report, and returns them as first-class objects. It handles
 the two features that make LSA data awkward:
 
@@ -47,10 +47,10 @@ lsa_by(stu, by = "CNT", estimator = social_gradient,
 ```
 
 and
-[`tidy()`](https://kevisc.github.io/lsastrat/reference/tidy.lsastrat_estimate.md)
+[`tidy()`](https://kevinschoenholzer.com/lsastrat/reference/tidy.lsastrat_estimate.md)
 turns any result into a publication table, `autoplot()` into a figure,
 and
-[`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+[`lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_multiverse.md)
 into a robustness analysis.
 
 All examples use `pisa_mini`, a **fully simulated** PISA-like data set
@@ -68,7 +68,7 @@ math <- paste0("PV", 1:10, "MATH")
 
 ## The socio-economic gradient
 
-[`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md)
+[`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md)
 follows the OECD definition: the **slope** is the score-point change per
 one unit of the socio-economic index (ESCS), the **strength** is the
 percentage of achievement variance it explains (R² × 100), and
@@ -115,7 +115,7 @@ plot(g)
 
 ## School segregation
 
-[`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md)
+[`segregation_index()`](https://kevinschoenholzer.com/lsastrat/reference/segregation_index.md)
 reports the family of indices used in stratification research. Pass a
 categorical `group` for **social** segregation:
 
@@ -139,10 +139,11 @@ segregation_index(pisa_mini, unit = "school_id", group = "IMMIG",
 ```
 
 The entropy and dissimilarity indices are upward-biased when schools are
-small — exactly the LSA case. With `variance = "bootstrap"` a two-stage
-clustered bootstrap estimates and removes that bias (`debias = TRUE`)
-and gives a design-correct standard error. With replicate weights you
-can instead use them directly (no bias correction):
+small, which is exactly the LSA case. With `variance = "bootstrap"` a
+two-stage clustered bootstrap estimates and removes that bias
+(`debias = TRUE`) and gives a design-correct standard error. With
+replicate weights you can instead use them directly (no bias
+correction):
 
 ``` r
 
@@ -181,7 +182,7 @@ segregation_index(pisa_mini, unit = "school_id", achievement = math,
 
 ## Inequality of educational opportunity
 
-[`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md)
+[`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md)
 implements the Ferreira–Gignoux (2014) decomposition: the share of
 achievement variance explained by pre-determined **circumstances**.
 
@@ -204,7 +205,7 @@ ieop(pisa_mini, achievement = math,
 #> iop = share of achievement variance explained by circumstances (raw R^2, upper bound); iop_adj = df-adjusted
 ```
 
-The raw `iop` is the regression R² and is an **upper bound** — it
+The raw `iop` is the regression R² and is an **upper bound**: it
 inflates as the circumstance set grows. `iop_adj` is the
 degrees-of-freedom adjusted version; prefer it, and treat `iop` as the
 ceiling. `explained_var` is the absolute inequality of opportunity
@@ -213,11 +214,11 @@ variance.
 
 ## Comparing groups
 
-[`lsa_by()`](https://kevisc.github.io/lsastrat/reference/lsa_by.md) runs
-any estimator across the levels of a grouping variable and stacks the
-results into one comparable table – the workhorse for cross-country
+[`lsa_by()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_by.md)
+runs any estimator across the levels of a grouping variable and stacks
+the results into one comparable table – the workhorse for cross-country
 work.
-[`equity_scatter()`](https://kevisc.github.io/lsastrat/reference/equity_scatter.md)
+[`equity_scatter()`](https://kevinschoenholzer.com/lsastrat/reference/equity_scatter.md)
 draws the OECD quality-vs-equity scatter.
 
 ``` r
@@ -310,10 +311,10 @@ oaxaca_gap(d2, math, group = "IMMIG",
 
 ## Multiverse analysis
 
-[`lsa_multiverse()`](https://kevisc.github.io/lsastrat/reference/lsa_multiverse.md)
+[`lsa_multiverse()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_multiverse.md)
 runs an estimator across a grid of analytic forking paths so you can
 read off how robust a finding is. Bundle the design once with
-[`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md):
+[`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md):
 
 ``` r
 
@@ -328,7 +329,7 @@ mv <- lsa_multiverse(
 mv
 #> Multiverse: `social_gradient`, term = slope  (4 specifications)
 #>   median estimate: 39.1   range: [36.8, 41.4]
-#>   100% of specifications same-signed; 100% exclude 0 (95% CI)
+#>   100% of specifications share the sign of the median; 100% exclude 0 (95% CI)
 ```
 
 Every result has a
@@ -339,7 +340,7 @@ Every result has a
 
 ## Beyond the built-in estimators
 
-[`lsa_model()`](https://kevisc.github.io/lsastrat/reference/lsa_model.md)
+[`lsa_model()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_model.md)
 fits *any* model to a plausible-value outcome with replicate-weight
 inference – a multiple regression, a logistic model, or a multilevel
 model – pooling over plausible values exactly as the built-in estimators
@@ -364,7 +365,7 @@ lsa_model(pisa_mini, ~ ESCS + IMMIG + female, achievement = math, design = des)
 #> fitter = stats::lm
 ```
 
-[`lsa_trend()`](https://kevisc.github.io/lsastrat/reference/lsa_trend.md)
+[`lsa_trend()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_trend.md)
 compares a quantity across assessment cycles and folds the linking
 (equating) error into the standard error of the change:
 
@@ -386,6 +387,50 @@ lsa_trend(list("2018" = c1, "2022" = c2), term = "slope", link_error = 3.5)
 
 On large data the replicate-weight refits can be run in parallel with
 `options(lsastrat.cores = 4)` (Unix/macOS).
+
+## TIMSS, PIRLS and PIAAC
+
+The estimators do not depend on PISA. They need plausible values, a
+final weight and replicate weights, and the name of the replication
+method.
+
+TIMSS and PIRLS ship no replicate weights. They ship the final weight
+(`TOTWGT`), a jackknife zone (`JKZONE`) and a replicate indicator
+(`JKREP`).
+[`jk2_weights()`](https://kevinschoenholzer.com/lsastrat/reference/jk2_weights.md)
+builds one replicate weight per zone from these columns. The toy sample
+below has four zones with two schools each.
+
+``` r
+
+iea <- data.frame(
+  JKZONE = rep(1:4, each = 6),
+  JKREP  = rep(rep(0:1, each = 3), times = 4),
+  TOTWGT = 1,
+  score  = c(480, 510, 495, 530, 500, 520, 470, 505, 490, 515, 525, 500,
+             540, 495, 510, 485, 500, 530, 505, 515, 490, 520, 480, 510)
+)
+iea <- jk2_weights(iea)
+iea_des <- lsa_design(weight = "TOTWGT", repweights = attr(iea, "repweights"),
+                      rep_method = "JK2")
+lsa_model(iea, ~ 1, achievement = "score", design = iea_des)
+#> Model: stats::lm(<PV> ~ 1)
+#>   1 plausible value(s)  |  n = 24
+#>   Variance: JK2, 4 replicate weights (+ PV imputation); t reference
+#> 
+#> 
+#>             Estimate Std.Error     t  df p
+#> (Intercept)      505      4.32 116.9 Inf 0
+#> 
+#> fitter = stats::lm
+```
+
+PIAAC ships 80 replicate weights (`SPFWT1` to `SPFWT80`) and names the
+replication method of each country in the variable `VEMETHOD`. Pass that
+method to
+[`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md);
+the script `data-raw/validate_piaac.R` in the source repository shows
+the full call.
 
 ## Where it fits
 

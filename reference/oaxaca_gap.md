@@ -63,12 +63,12 @@ oaxaca_gap(
 - rep_method, fay:
 
   Replication design and Fay factor; see
-  [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+  [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md).
 
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
   it overrides those arguments.
 
@@ -90,7 +90,7 @@ The `"twofold"` form uses a pooled reference model (Neumark) and reports
 `gap`, `explained` and `unexplained`. The `"threefold"` form reports
 `gap`, `endowments`, `coefficients` and `interaction`. Estimates are
 pooled over plausible values with replicate-weight standard errors (see
-[`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md)).
+[`pool_pv()`](https://kevinschoenholzer.com/lsastrat/reference/pool_pv.md)).
 
 ## References
 

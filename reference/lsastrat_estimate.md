@@ -1,10 +1,15 @@
 # Methods for lsastrat estimate objects
 
-All three estimators
-([`social_gradient()`](https://kevisc.github.io/lsastrat/reference/social_gradient.md),
-[`segregation_index()`](https://kevisc.github.io/lsastrat/reference/segregation_index.md),
-[`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md)) return
-an object of class `"lsastrat_estimate"` carrying a pooled
+Every estimator
+([`social_gradient()`](https://kevinschoenholzer.com/lsastrat/reference/social_gradient.md),
+[`segregation_index()`](https://kevinschoenholzer.com/lsastrat/reference/segregation_index.md),
+[`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md),
+[`variance_decomposition()`](https://kevinschoenholzer.com/lsastrat/reference/variance_decomposition.md),
+[`ieop_decompose()`](https://kevinschoenholzer.com/lsastrat/reference/ieop_decompose.md),
+[`oaxaca_gap()`](https://kevinschoenholzer.com/lsastrat/reference/oaxaca_gap.md)
+and
+[`lsa_model()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_model.md))
+returns an object of class `"lsastrat_estimate"` with a pooled
 `coefficients` data frame (columns `estimate`, `se`, `statistic`, `df`,
 `p`, `ci_lo`, `ci_hi`). These methods provide a uniform interface.
 

@@ -54,12 +54,12 @@ ieop(
 - rep_method, fay:
 
   Replication design and Fay factor; see
-  [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+  [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md).
 
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
   it overrides those arguments.
 
@@ -76,7 +76,7 @@ ieop(
 ## Value
 
 An object of class `"ieop"` / `"lsastrat_estimate"` (see
-[lsastrat_estimate](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+[lsastrat_estimate](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
 for methods).
 
 ## Details

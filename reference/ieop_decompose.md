@@ -2,8 +2,8 @@
 
 Attributes the relative inequality of educational opportunity (the
 circumstance \\R^2\\ from
-[`ieop()`](https://kevisc.github.io/lsastrat/reference/ieop.md)) to each
-individual circumstance using Shapley values: each circumstance's
+[`ieop()`](https://kevinschoenholzer.com/lsastrat/reference/ieop.md)) to
+each individual circumstance using Shapley values: each circumstance's
 contribution is its average marginal increase in \\R^2\\ over all
 orderings of the circumstance set. The contributions are additive and
 **sum to the total relative IOp**, so they answer "how much of the
@@ -54,12 +54,12 @@ ieop_decompose(
 - rep_method, fay:
 
   Replication design and Fay factor; see
-  [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+  [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md).
 
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
   it overrides those arguments.
 

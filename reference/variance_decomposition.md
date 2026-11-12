@@ -51,12 +51,12 @@ variance_decomposition(
 - rep_method, fay:
 
   Replication design and Fay factor; see
-  [`rep_factor()`](https://kevisc.github.io/lsastrat/reference/rep_factor.md).
+  [`rep_factor()`](https://kevinschoenholzer.com/lsastrat/reference/rep_factor.md).
 
 - design:
 
   Optional
-  [`lsa_design()`](https://kevisc.github.io/lsastrat/reference/lsa_design.md)
+  [`lsa_design()`](https://kevinschoenholzer.com/lsastrat/reference/lsa_design.md)
   bundling `weight`, `repweights`, `rep_method` and `fay`; when supplied
   it overrides those arguments.
 
@@ -73,7 +73,7 @@ variance_decomposition(
 
 An object of class `"variance_decomposition"` / `"lsastrat_estimate"`
 (see
-[lsastrat_estimate](https://kevisc.github.io/lsastrat/reference/lsastrat_estimate.md)
+[lsastrat_estimate](https://kevinschoenholzer.com/lsastrat/reference/lsastrat_estimate.md)
 for methods).
 
 ## Details
@@ -82,7 +82,7 @@ The decomposition is the design-based (weighted) analysis-of-variance
 decomposition, `var_total = var_between + var_within`, pooled over
 plausible values with Rubin's rules and with replicate-weight standard
 errors when replicate weights are supplied (see
-[`pool_pv()`](https://kevisc.github.io/lsastrat/reference/pool_pv.md)).
+[`pool_pv()`](https://kevinschoenholzer.com/lsastrat/reference/pool_pv.md)).
 
 ## Examples
 

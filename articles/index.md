@@ -3,4 +3,4 @@
 ### All vignettes
 
 - [Getting started with
-  lsastrat](https://kevisc.github.io/lsastrat/articles/lsastrat.md):
+  lsastrat](https://kevinschoenholzer.com/lsastrat/articles/lsastrat.md):
